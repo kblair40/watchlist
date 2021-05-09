@@ -1,0 +1,99 @@
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+
+import Button from "@material-ui/core/Button";
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import WatchlistItem from "./WatchlistItem";
+
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+
+const styles = {
+  Watchlist: {},
+  title: {
+    textAlign: "center",
+  },
+  tickerInput: {
+    marginBottom: "0.5rem",
+    display: "flex",
+    flexDirection: "column",
+  },
+  stockList: {
+    overflow: "scroll",
+    maxHeight: "20rem",
+    border: ".5px solid #eee",
+  },
+  submitBtn: {
+    margin: "0.3rem 0",
+    alignSelf: "center",
+    width: "50%",
+    minWidth: "80px",
+  },
+  newTicker: {
+    width: "100%",
+  },
+  newTickerLabel: {
+    color: "#000",
+  },
+};
+
+class Watchlist extends Component {
+  render() {
+    const {
+      classes,
+      handleTickerChange,
+      handleWatchlistClick,
+      plotData,
+      addTicker,
+      userTickers,
+      deleteTicker,
+    } = this.props;
+    return (
+      <div className={classes.watchlist}>
+        <List>
+          <form className={classes.tickerInput}>
+            <InputLabel
+              className={classes.newTickerLabel}
+              component="legend"
+              htmlFor="tickerInput"
+            >
+              Add Ticker
+            </InputLabel>
+            <Input
+              className={classes.newTicker}
+              placeholder="ex. aapl"
+              id="tickerInput"
+              onChange={handleTickerChange}
+            >
+              Ticker
+            </Input>
+            <Button
+              type="submit"
+              className={classes.submitBtn}
+              onClick={addTicker}
+              variant="contained"
+              color="primary"
+            >
+              Submit
+            </Button>
+          </form>
+          <Divider />
+          <h2 className={classes.title}>WATCHLIST</h2>
+          <div className={classes.stockList}>
+            {userTickers.map((ticker) => (
+              <WatchlistItem
+                key={ticker}
+                ticker={ticker}
+                handleClick={handleWatchlistClick}
+                deleteTicker={deleteTicker}
+              />
+            ))}
+          </div>
+        </List>
+      </div>
+    );
+  }
+}
+
+export default withStyles(styles)(Watchlist);

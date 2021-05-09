@@ -1,0 +1,60 @@
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Radio from "@material-ui/core/Radio";
+import RadioGroup from "@material-ui/core/RadioGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormControl from "@material-ui/core/FormControl";
+import FormLabel from "@material-ui/core/FormLabel";
+
+const styles = {
+  inputForm: {
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
+    maxWidth: "1050px",
+    minWidth: "275px",
+    flexWrap: "wrap",
+  },
+};
+
+class SetTimeframe extends Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  async handleChange(e) {
+    const { ticker, handleTimeframeChange, plotData } = this.props;
+    handleTimeframeChange(e);
+    if (ticker.length) {
+      plotData(e);
+    }
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className={classes.RequestData}>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Timeframe</FormLabel>
+          <RadioGroup
+            aria-label="Timeframe"
+            name="timeframe"
+            row={true}
+            onChange={this.handleChange}
+          >
+            <FormControlLabel value="5d" control={<Radio />} label="5 Days" />
+            <FormControlLabel value="10d" control={<Radio />} label="10 Days" />
+            <FormControlLabel value="1m" control={<Radio />} label="1 Month" />
+            <FormControlLabel value="3m" control={<Radio />} label="3 Months" />
+            <FormControlLabel value="6m" control={<Radio />} label="6 Months" />
+            <FormControlLabel value="1y" control={<Radio />} label="1 Year" />
+            <FormControlLabel value="3y" control={<Radio />} label="3 Years" />
+            <FormControlLabel value="5y" control={<Radio />} label="5 Years" />
+          </RadioGroup>
+        </FormControl>
+      </div>
+    );
+  }
+}
+export default withStyles(styles)(SetTimeframe);
