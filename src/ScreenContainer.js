@@ -21,7 +21,7 @@ const styles = {
     // },
   },
   divider: {
-    margin: "1rem 0",
+    margin: ".5rem 0",
   },
 };
 
@@ -45,14 +45,7 @@ class ScreenContainer extends Component {
   }
 
   deleteTicker(e, ticker) {
-    // console.log("e:", e);
-    // console.log("ticker:", ticker);
-    // console.log("parents");
-    // console.log(e.target.parentElement);
-    // console.log(e.target.parentElement.parentElement.innerText);
     e.stopPropagation();
-    console.log("e:", e);
-    console.log("DELETING", ticker);
     this.setState({
       userTickers: this.state.userTickers.filter((tick) => tick !== ticker),
     });
@@ -79,27 +72,36 @@ class ScreenContainer extends Component {
     this.setState({ tickerInput: e.target.value });
   }
 
-  addTicker(e) {
-    this.setState({
-      userTickers: [...this.state.userTickers, this.state.tickerInput],
-    });
-    this.plotData(e, this.state.tickerInput);
+  async addTicker(e) {
+    const newTicker = this.state.tickerInput.toLowerCase();
+    const isValid = await this.plotData(e, newTicker);
+    if (isValid && !this.state.userTickers.includes(newTicker)) {
+      this.setState({
+        userTickers: [...this.state.userTickers, newTicker],
+      });
+    }
+
+    // this.plotData(e, this.state.tickerInput);
   }
   async plotData(e, ticker) {
     e.preventDefault();
-    let [priceData, min, max] = await getData(
-      this.state.tickerInput,
-      this.state.timeframe
-    );
-    console.log("RECEIVED:", min, max, typeof min, typeof max);
+    let data = await getData(this.state.tickerInput, this.state.timeframe);
+    let priceData, min, max;
+    if (data) {
+      [priceData, min, max] = data;
+    } else {
+      return false;
+    }
     this.setState({
       data: priceData,
       dataMin: min,
       dataMax: max,
     });
+    return true;
   }
+
   render() {
-    const { tickerInput, data, dataMin, dataMax, userTickers } = this.state;
+    const { data, dataMin, dataMax, userTickers, timeframe } = this.state;
     const { classes } = this.props;
     return (
       <div className={classes.ScreenContainer}>
@@ -120,8 +122,9 @@ class ScreenContainer extends Component {
           />
           <ChartContainer
             priceData={data}
-            dataMin={parseFloat(dataMin.toFixed(2))}
-            dataMax={parseFloat(dataMax.toFixed(2))}
+            dataMin={data ? parseFloat(dataMin.toFixed(2)) : null}
+            dataMax={data ? parseFloat(dataMax.toFixed(2)) : null}
+            timeframe={timeframe}
           />
         </div>
       </div>

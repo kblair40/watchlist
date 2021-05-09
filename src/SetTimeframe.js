@@ -7,13 +7,19 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
 const styles = {
-  inputForm: {
+  timeframes: {
     display: "flex",
     width: "100%",
     justifyContent: "space-between",
     maxWidth: "1050px",
     minWidth: "275px",
     flexWrap: "wrap",
+  },
+  timeframeLabel: {
+    color: "black",
+  },
+  radioGroup: {
+    margin: "0px",
   },
 };
 
@@ -34,14 +40,17 @@ class SetTimeframe extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.RequestData}>
+      <div className={classes.timeframes}>
         <FormControl component="fieldset">
-          <FormLabel component="legend">Timeframe</FormLabel>
+          <FormLabel className={classes.timeframeLabel} component="legend">
+            Timeframe
+          </FormLabel>
           <RadioGroup
             aria-label="Timeframe"
             name="timeframe"
             row={true}
             onChange={this.handleChange}
+            className={classes.radioGroup}
           >
             <FormControlLabel value="5d" control={<Radio />} label="5 Days" />
             <FormControlLabel value="10d" control={<Radio />} label="10 Days" />

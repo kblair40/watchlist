@@ -22,7 +22,6 @@ const styles = {
   stockList: {
     overflow: "scroll",
     maxHeight: "20rem",
-    border: ".5px solid #eee",
   },
   submitBtn: {
     margin: "0.3rem 0",
@@ -44,7 +43,6 @@ class Watchlist extends Component {
       classes,
       handleTickerChange,
       handleWatchlistClick,
-      plotData,
       addTicker,
       userTickers,
       deleteTicker,

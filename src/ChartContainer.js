@@ -18,7 +18,10 @@ const styles = {
 class ChartContainer extends Component {
   render() {
     let { priceData } = { ...this.props };
-    const { classes, dataMin, dataMax } = this.props;
+    const { classes, dataMin, dataMax, timeframe } = this.props;
+    console.log("CHART CONTAINER:");
+    console.log(dataMin, dataMax, timeframe);
+    console.log("priceData:", priceData);
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer width="100%" height={450} minHeight={300}>

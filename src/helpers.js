@@ -1,7 +1,7 @@
 import yahooFinance from "yahoo-finance2";
 import dayjs from "dayjs";
 
-// 1d, 10d, 1m, 6m, 1y, 3y, 5y
+// 1d, 10d, 1m, 3m, 6m, 1y, 3y, 5y
 const TIMEMAPPING = {
   "5d": ["day", 5],
   "10d": ["day", 10],
@@ -32,7 +32,15 @@ export async function getData(ticker, timeframe) {
   let toSub = TIMEMAPPING[timeframe];
   let startDate = dayjs().subtract(toSub[1], toSub[0])["$d"];
   let options = { period1: startDate };
-  const rawData = await yahooFinance.historical(ticker, options);
+  let rawData;
+  try {
+    // rawData = validateTicker(ticker, options);
+    rawData = await yahooFinance.historical(ticker, options);
+  } catch (error) {
+    console.log("ERROR-ERROR:", error);
+    rawData = null;
+    return rawData;
+  }
   let min = rawData[0].adjClose;
   let max = rawData[0].adjClose;
   let data = [];
@@ -46,3 +54,5 @@ export async function getData(ticker, timeframe) {
   }
   return [data, min * 0.9, max * 1.1];
 }
+
+// async function validateTicker(ticker, options) {}

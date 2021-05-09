@@ -14,7 +14,6 @@ class WatchlistItem extends Component {
         <ListItem button onClick={handleClick}>
           <ListItemIcon>
             <IconButton onClick={(e) => deleteTicker(e, ticker)}>
-              {/* <IconButton onClick={deleteTicker}> */}
               <DeleteIcon color="secondary" />
             </IconButton>
           </ListItemIcon>
