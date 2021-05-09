@@ -34,10 +34,8 @@ export async function getData(ticker, timeframe) {
   let options = { period1: startDate };
   let rawData;
   try {
-    // rawData = validateTicker(ticker, options);
     rawData = await yahooFinance.historical(ticker, options);
   } catch (error) {
-    console.log("ERROR-ERROR:", error);
     rawData = null;
     return rawData;
   }
@@ -55,4 +53,4 @@ export async function getData(ticker, timeframe) {
   return [data, min * 0.9, max * 1.1];
 }
 
-// async function validateTicker(ticker, options) {}
+async function validateTicker(ticker, options) {}

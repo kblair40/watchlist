@@ -18,10 +18,9 @@ const styles = {
 class ChartContainer extends Component {
   render() {
     let { priceData } = { ...this.props };
-    const { classes, dataMin, dataMax, timeframe } = this.props;
-    console.log("CHART CONTAINER:");
-    console.log(dataMin, dataMax, timeframe);
-    console.log("priceData:", priceData);
+    const { classes, dataMin, dataMax, timeframe, ticker } = this.props;
+    // console.log("priceData:", priceData);
+    // CHECK HERE FOR PRICE DATA.  IF NO PRICE DATA, RENDER ERROR MODAL INSTEAD
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer width="100%" height={450} minHeight={300}>
@@ -31,12 +30,13 @@ class ChartContainer extends Component {
               top: 5,
               right: 15,
               bottom: 10,
-              left: 5,
+              left: 10,
             }}
           >
-            <XAxis dataKey="date" padding={{ left: 5, right: 5, top: 5 }} />
-            <YAxis dataKey="price" type="number" domain={[dataMin, dataMax]} />
-            <Line dataKey="price" />
+            <XAxis dataKey="date" />
+            {/* <YAxis dataKey="price" type="number" domain={[dataMin, dataMax]} /> */}
+            <YAxis domain={[dataMin, dataMax]} />
+            <Line dataKey="price" name={ticker.toUpperCase()} />
             <Tooltip />
             <CartesianGrid />
             <Legend />

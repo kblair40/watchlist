@@ -32,13 +32,14 @@ class SetTimeframe extends Component {
   async handleChange(e) {
     const { ticker, handleTimeframeChange, plotData } = this.props;
     handleTimeframeChange(e);
-    if (ticker.length) {
-      plotData(e);
-    }
+    // plotData(e);
+    // if (ticker.length) {
+    //   plotData(e);
+    // }
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, handleTimeframeChange } = this.props;
     return (
       <div className={classes.timeframes}>
         <FormControl component="fieldset">
@@ -50,6 +51,7 @@ class SetTimeframe extends Component {
             name="timeframe"
             row={true}
             onChange={this.handleChange}
+            // onChange={handleTimeframeChange}
             className={classes.radioGroup}
           >
             <FormControlLabel value="5d" control={<Radio />} label="5 Days" />
