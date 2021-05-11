@@ -53,4 +53,12 @@ export async function getData(ticker, timeframe) {
   return [data, min * 0.9, max * 1.1];
 }
 
-async function validateTicker(ticker, options) {}
+// twoHundredDayAverage, fiftyDayAverage
+export async function getMovingAverages(ticker) {
+  let quoteSum = await yahooFinance.quoteSummary(ticker);
+  // console.log("quoteSum:", quoteSum.summaryDetail);
+  let fifty = quoteSum.summaryDetail.fiftyDayAverage;
+  let twoHundred = quoteSum.summaryDetail.twoHundredDayAverage;
+  // console.log("fifty:", fifty, "\ntwoHundred:", twoHundred);
+  return [fifty, twoHundred];
+}

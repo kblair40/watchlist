@@ -10,12 +10,17 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 
 const styles = {
-  Watchlist: {},
+  Watchlist: {
+    // width: "100%",
+    // minWidth: "140px",
+    // maxWidth: "200px",
+  },
   title: {
     textAlign: "center",
+    marginTop: "3rem",
   },
   tickerInput: {
-    marginBottom: "0.5rem",
+    marginBottom: "0rem",
     display: "flex",
     flexDirection: "column",
   },
@@ -28,9 +33,6 @@ const styles = {
     alignSelf: "center",
     width: "50%",
     minWidth: "80px",
-  },
-  newTicker: {
-    width: "100%",
   },
   newTickerLabel: {
     color: "#000",
@@ -59,7 +61,6 @@ class Watchlist extends Component {
               Add Ticker
             </InputLabel>
             <Input
-              className={classes.newTicker}
               placeholder="ex. aapl"
               id="tickerInput"
               onChange={handleTickerChange}
@@ -95,3 +96,29 @@ class Watchlist extends Component {
 }
 
 export default withStyles(styles)(Watchlist);
+
+// const styles = {
+//   Watchlist: {},
+//   title: {
+//     textAlign: "center",
+//     marginTop: "3rem",
+//   },
+//   tickerInput: {
+//     marginBottom: "0rem",
+//     display: "flex",
+//     flexDirection: "column",
+//   },
+//   stockList: {
+//     overflow: "scroll",
+//     maxHeight: "20rem",
+//   },
+//   submitBtn: {
+//     margin: "0.3rem 0",
+//     alignSelf: "center",
+//     width: "50%",
+//     minWidth: "80px",
+//   },
+//   newTickerLabel: {
+//     color: "#000",
+//   },
+// };
