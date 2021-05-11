@@ -6,20 +6,18 @@ import yahooFinance from "yahoo-finance2";
 
 const styles = {
   Summary: {
-    justifySelf: "start",
-    // marginTop: "2%",
+    // justifySelf: "start",
+    // border: "1px solid orange",
+    minWidth: "550px",
   },
   data: {
     color: "red",
     fontWeight: "700",
     float: "right",
   },
-  section: {
-    border: "1px solid #bbb",
-    display: "inline-flex",
-    justifyContent: "space-between",
-    width: "25%",
-    padding: ".2rem",
+  companyName: {
+    textAlign: "center",
+    lineHeight: ".5rem",
   },
 };
 
@@ -56,12 +54,16 @@ class Summary extends Component {
   render() {
     const { classes } = this.props;
     return (
+      // <div>
       <div className={classes.Summary}>
+        <h3 className={classes.companyName}>{this.state.shortName}</h3>
+
         <DataItem category="shortName" data={this.state.shortName} />
         <DataItem
           category="fiftyTwoWeekHigh"
           data={this.state.fiftyTwoWeekHigh}
         />
+
         <DataItem
           category="fiftyTwoWeekLow"
           data={this.state.fiftyTwoWeekLow}
@@ -77,6 +79,7 @@ class Summary extends Component {
         />
         <DataItem category="trailingPE" data={this.state.trailingPE} />
       </div>
+      //{/* </div> */}
     );
   }
 }

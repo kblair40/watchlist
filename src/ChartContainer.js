@@ -14,8 +14,9 @@ import {
 
 const styles = {
   ChartContainer: {
-    // minWidth: "550px",
-    width: "100%",
+    // minWidth: "100%",
+    // padding: "1rem",
+    // width: "100%",
   },
 };
 
@@ -38,8 +39,7 @@ class ChartContainer extends Component {
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer
-          width="99%"
-          // height="100%"
+          width="100%" // height="100%" // height={450}
           // height={450}
           // minHeight={400}
           // minWidth={500}

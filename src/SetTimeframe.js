@@ -8,24 +8,24 @@ import FormLabel from "@material-ui/core/FormLabel";
 
 const styles = {
   timeframes: {
-    alignSelf: "end",
     display: "flex",
-    justifyContent: "flex-start",
-    alignContent: "center",
-    flexWrap: "wrap",
-    marginTop: ".5rem",
+    justifyContent: "center",
+    padding: ".3rem",
   },
   timeframeLabel: {
     color: "#222",
+    textAlign: "center",
   },
   radioGroup: {
     width: "100%",
     minWidth: "515px",
     display: "flex",
+    justifyContent: "center",
     flexWrap: "wrap",
-  },
-  lessMargin: {
-    marginRight: "-5px",
+    "@media screen and (max-width: 920px)": {
+      // flexDirection: "column",
+      // alignItems: "center",
+    },
   },
   timeframeOptions1: {
     display: "flex",
@@ -61,7 +61,10 @@ class SetTimeframe extends Component {
     const { classes, handleTimeframeChange } = this.props;
     return (
       <div className={classes.timeframes}>
-        <FormControl component="fieldset">
+        <FormControl
+          // className={classes.timeframes}
+          component="fieldset"
+        >
           <FormLabel className={classes.timeframeLabel} component="legend">
             Timeframe
           </FormLabel>
@@ -71,6 +74,7 @@ class SetTimeframe extends Component {
             row={true}
             onChange={this.handleChange}
             className={classes.radioGroup}
+            // className={classes.timeframes}
           >
             <div className={classes.timeframeOptions1}>
               <FormControlLabel

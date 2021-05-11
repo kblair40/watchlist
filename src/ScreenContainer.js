@@ -11,38 +11,71 @@ import { getData, getMovingAverages } from "./helpers";
 
 const styles = {
   ScreenContainer: {
+    backgroundColor: "",
     height: "100vh",
+    minHeight: "850px",
+    width: "100vw",
     padding: "1rem",
     display: "grid",
-    gridTemplateRows: "min-content min-content min-content",
-    justifyItems: "center",
+    // justifyItems: "start",
+    justifyContent: "start",
     alignItems: "start",
-    // For some reason, setting to 100% allows chart to expand as wide as screen allows
-    // gridTemplateColumns: "50% 50%",
+    gridTemplateAreas: `'wc wc wc'
+                        'sumOpt sumOpt sumOpt'`,
+    gridTemplateRows: "minmax(20rem, 60vh) minmax(10rem, 40vh)",
+    gridTemplateColumns:
+      "minmax(5rem, 15vw) minmax(5rem, 15vw) minmax(35rem, 70vw)",
+    "@media screen and (max-width: 920px)": {
+      gridTemplateAreas: `
+                        'wc wc'
+                        'sumOpt sumOpt'
+                        `,
+      gridTemplateColumns: "minmax(5rem, 20vw) minmax(15rem, 80vw)",
+      gridTemplateRows: "minmax(10rem, 50vh) minmax(6rem, 50vh)",
+    },
   },
   watchlistAndChart: {
-    padding: ".5rem",
+    width: "95%",
+    gridArea: "wc",
     display: "grid",
-    gridTemplateRows: "100%",
-    gridTemplateColumns: "minmax(min-content, 10%) minmax(400px, 90%)",
-    // "@media screen and (max-width: 750px)": {
-    //   gridTemplateColumns: "100%",
-    //   gridTemplateRows: "13% 87%",
-    // },
+    gridTemplateRows: "minmax(300px, 100%)",
+    gridTemplateColumns: "minmax(200px, 20%) minmax(500px, 80%)",
+    "@media screen and (max-width: 920px)": {
+      gridTemplateRows: "minmax(300px, 80%)",
+    },
+  },
+  summaryAndOptions: {
+    gridArea: "sumOpt",
+    display: "flex",
+    minWidth: "600px",
+    "@media screen and (max-width: 920px)": {
+      flexDirection: "column",
+      alignItems: "center",
+      // marginTop: "3rem",
+    },
+    // border: "3px solid green",
   },
   chartOptions: {
-    width: "100%",
-    // border: "1px solid green",
-    justifySelf: "start",
-    // alignSelf: "end",
-    // gridColumn: "1 / span 1",
-    padding: ".3rem",
-    display: "grid",
-    gridTemplateRows: "min-content min-content min-content",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    lineHeight: ".5rem",
+    textAlign: "center",
+    fontSize: ".9rem",
+    width: "40%",
+    // minWidth: "600px",
+  },
+  chartOptionsLabel: {
+    lineHeight: ".5rem",
   },
   summarize: {
-    width: "100%",
-    padding: "1rem",
+    // justifySelf: "center",
+    fontSize: ".9rem",
+    width: "60%",
+    "@media screen and (max-width: 920px)": {
+      width: "100%",
+    },
   },
 };
 
@@ -78,9 +111,6 @@ class ScreenContainer extends Component {
   }
   async componentDidMount() {
     this.setMovingAverages();
-    // let [fifty, twoHundred] = await getMovingAverages(this.state.curTicker);
-    // console.log("MA:", [fifty, twoHundred]);
-    // this.setState({ movingAverages: { fifty: fifty, twoHundred: twoHundred } });
   }
 
   handleMaCheck(e) {
@@ -190,7 +220,6 @@ class ScreenContainer extends Component {
       <div className={classes.ScreenContainer}>
         <div className={classes.watchlistAndChart}>
           <Watchlist
-            className={classes.userWatchlist}
             plotData={this.plotData}
             addTicker={this.addTicker}
             handleTickerChange={this.handleTickerChange}
@@ -210,22 +239,38 @@ class ScreenContainer extends Component {
             timeframe={timeframe}
           />
         </div>
-        <div className={classes.chartOptions}>
-          <h2>Chart Options</h2>
-          <MovingAverageContainer
-            ticker={curTicker}
-            handleCheck={this.handleMaCheck}
-            fiftyIsChecked={fiftyIsChecked}
-            twoHundredIsChecked={twoHundredIsChecked}
-          />
-          <SetTimeframe
-            plotData={this.plotData}
-            handleTimeframeChange={this.handleTimeframeChange}
-            ticker={curTicker}
-          />
-        </div>
-        <div className={classes.summarize}>
-          <Summary ticker={curTicker} />
+        <div className={classes.summaryAndOptions}>
+          {/* <div className={classes.chartOptions}>
+            <h3 className={classes.chartOptionsLabel}>Chart Options</h3>
+            <SetTimeframe
+              plotData={this.plotData}
+              handleTimeframeChange={this.handleTimeframeChange}
+              ticker={curTicker}
+            />
+            <MovingAverageContainer
+              ticker={curTicker}
+              handleCheck={this.handleMaCheck}
+              fiftyIsChecked={fiftyIsChecked}
+              twoHundredIsChecked={twoHundredIsChecked}
+            />
+          </div> */}
+          <div className={classes.summarize}>
+            <Summary ticker={curTicker} />
+          </div>
+          <div className={classes.chartOptions}>
+            <h3 className={classes.chartOptionsLabel}>Chart Options</h3>
+            <SetTimeframe
+              plotData={this.plotData}
+              handleTimeframeChange={this.handleTimeframeChange}
+              ticker={curTicker}
+            />
+            <MovingAverageContainer
+              ticker={curTicker}
+              handleCheck={this.handleMaCheck}
+              fiftyIsChecked={fiftyIsChecked}
+              twoHundredIsChecked={twoHundredIsChecked}
+            />
+          </div>
         </div>
       </div>
     );

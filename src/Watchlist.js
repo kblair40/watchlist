@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
 import WatchlistItem from "./WatchlistItem";
 
@@ -11,32 +10,45 @@ import InputLabel from "@material-ui/core/InputLabel";
 
 const styles = {
   Watchlist: {
-    // width: "100%",
-    // minWidth: "140px",
-    // maxWidth: "200px",
-  },
-  title: {
-    textAlign: "center",
-    marginTop: "3rem",
-  },
-  tickerInput: {
-    marginBottom: "0rem",
     display: "flex",
     flexDirection: "column",
+    maxHeight: "30rem",
+    justifyContent: "center",
+    alignItems: "center",
   },
+  tickerInput: {
+    flex: "1 1 25%",
+    autocomplete: "false",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  title: {
+    minHeight: "2rem",
+    flex: "1 1 8%",
+    margin: "1rem 0 0 0",
+    textAlign: "center",
+  },
+
   stockList: {
-    overflow: "scroll",
-    maxHeight: "20rem",
+    flex: "1 2 72%",
+    overflowY: "auto",
+    direction: "rtl",
+    height: "100%",
+    minHeight: "5rem",
+    maxHeight: "100%",
+    display: "grid",
+    gridTemplateRows: "repeat(auto-fill, 4.2rem)",
   },
   submitBtn: {
     margin: "0.3rem 0",
-    alignSelf: "center",
     width: "50%",
     minWidth: "80px",
   },
   newTickerLabel: {
     color: "#000",
   },
+  singleStock: {},
 };
 
 class Watchlist extends Component {
@@ -50,75 +62,48 @@ class Watchlist extends Component {
       deleteTicker,
     } = this.props;
     return (
-      <div className={classes.watchlist}>
-        <List>
-          <form className={classes.tickerInput}>
-            <InputLabel
-              className={classes.newTickerLabel}
-              component="legend"
-              htmlFor="tickerInput"
-            >
-              Add Ticker
-            </InputLabel>
-            <Input
-              placeholder="ex. aapl"
-              id="tickerInput"
-              onChange={handleTickerChange}
-            >
-              Ticker
-            </Input>
-            <Button
-              type="submit"
-              className={classes.submitBtn}
-              onClick={addTicker}
-              variant="contained"
-              color="primary"
-            >
-              Submit
-            </Button>
-          </form>
-          <Divider />
-          <h2 className={classes.title}>WATCHLIST</h2>
-          <div className={classes.stockList}>
-            {userTickers.map((ticker) => (
-              <WatchlistItem
-                key={ticker}
-                ticker={ticker}
-                handleClick={handleWatchlistClick}
-                deleteTicker={deleteTicker}
-              />
-            ))}
-          </div>
-        </List>
-      </div>
+      <List className={classes.Watchlist}>
+        <form className={classes.tickerInput}>
+          <InputLabel
+            className={classes.newTickerLabel}
+            component="legend"
+            htmlFor="tickerInput"
+          >
+            Add Ticker
+          </InputLabel>
+          <Input
+            style={{ automcomplete: "false" }}
+            placeholder="ex. aapl"
+            id="tickerInput"
+            onChange={handleTickerChange}
+          >
+            Ticker
+          </Input>
+          <Button
+            type="submit"
+            className={classes.submitBtn}
+            onClick={addTicker}
+            variant="contained"
+            color="primary"
+          >
+            Submit
+          </Button>
+        </form>
+        <h2 className={classes.title}>WATCHLIST</h2>
+        <div className={classes.stockList}>
+          {userTickers.map((ticker) => (
+            <WatchlistItem
+              className={classes.singleStock}
+              key={ticker}
+              ticker={ticker}
+              handleClick={handleWatchlistClick}
+              deleteTicker={deleteTicker}
+            />
+          ))}
+        </div>
+      </List>
     );
   }
 }
 
 export default withStyles(styles)(Watchlist);
-
-// const styles = {
-//   Watchlist: {},
-//   title: {
-//     textAlign: "center",
-//     marginTop: "3rem",
-//   },
-//   tickerInput: {
-//     marginBottom: "0rem",
-//     display: "flex",
-//     flexDirection: "column",
-//   },
-//   stockList: {
-//     overflow: "scroll",
-//     maxHeight: "20rem",
-//   },
-//   submitBtn: {
-//     margin: "0.3rem 0",
-//     alignSelf: "center",
-//     width: "50%",
-//     minWidth: "80px",
-//   },
-//   newTickerLabel: {
-//     color: "#000",
-//   },
-// };

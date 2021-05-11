@@ -9,15 +9,17 @@ import { getMovingAverages } from "./helpers";
 
 const styles = {
   MovingAverageContainer: {
-    // border: "2px solid red",
-    alignSelf: "end",
+    // border: "1px solid red",
+    // alignSelf: "end",
     display: "flex",
-    justifyContent: "flex-start",
-    alignContent: "center",
     flexWrap: "wrap",
   },
   maLabel: {
+    textAlign: "center",
     color: "#222",
+    marginBottom: "-5px",
+  },
+  lessMargin: {
     marginBottom: "-5px",
   },
 };
@@ -31,36 +33,33 @@ class MovingAverageContainer extends Component {
     };
   }
 
-  componentDidMount() {
-    const { ticker } = this.props;
-    // console.log("TICKER:", ticker);
-    // let [fifty, twoHundred] = getMovingAverages;
-    // console.log("50:", fifty, "\n200:", twoHundred);
-    // this.setState({});
-  }
+  // componentDidMount() {
+  //   const { ticker } = this.props;
+  // }
 
   render() {
     // console.log("MovingAverageContainer");
     // console.log("PROPS:", this.props.movingAverages);
-    const {
-      classes,
-      handleCheck,
-      fiftyIsChecked,
-      twoHundredIsChecked,
-    } = this.props;
+    const { classes, handleCheck, fiftyIsChecked, twoHundredIsChecked } =
+      this.props;
     return (
       <div className={classes.MovingAverageContainer}>
-        <FormControl component="fieldset">
+        <FormControl
+          // className={classes.MovingAverageContainer}
+          component="fieldset"
+        >
           <FormLabel className={classes.maLabel} component="legend">
             Show Moving Average
           </FormLabel>
           <FormGroup row={true}>
             <FormControlLabel
+              className={classes.lessMargin}
               control={
                 <Checkbox
                   onClick={handleCheck}
                   value="50"
                   checked={fiftyIsChecked}
+                  className={classes.lessMargin}
                 />
               }
               label="50-day"
