@@ -1,6 +1,8 @@
 import { withStyles } from "@material-ui/core/styles";
 import React, { Component } from "react";
 import {
+  AreaChart,
+  Area,
   LineChart,
   Line,
   XAxis,
@@ -45,7 +47,7 @@ class ChartContainer extends Component {
           // minWidth={500}
           // minWidth="80%"
         >
-          <LineChart
+          <AreaChart
             data={priceData}
             margin={{
               top: 30,
@@ -88,7 +90,7 @@ class ChartContainer extends Component {
             ) : (
               ""
             )}
-            <Line
+            <Area
               dataKey="price"
               name={ticker.toUpperCase()}
               dot={false}
@@ -97,7 +99,7 @@ class ChartContainer extends Component {
             <Tooltip />
             <CartesianGrid />
             <Legend />
-          </LineChart>
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     );
@@ -106,6 +108,58 @@ class ChartContainer extends Component {
 
 export default withStyles(styles)(ChartContainer);
 
-// const styles = {
-//   chartContainer: {},
-// };
+// {
+/* <LineChart
+            data={priceData}
+            margin={{
+              top: 30,
+              right: 15,
+              bottom: 10,
+              left: 20,
+            }}
+          >
+            <XAxis dataKey="date" />
+            <YAxis domain={[dataMin, dataMax]} />
+            {fiftyIsChecked ? (
+              <ReferenceLine
+                y={fiftyPrice}
+                name="50-Day Moving Average"
+                stroke="red"
+              />
+            ) : (
+              ""
+            )}
+            {twoHundredIsChecked ? (
+              <ReferenceLine
+                y={twoHundredPrice}
+                name="200-Day Moving Average"
+                stroke="green"
+              />
+            ) : (
+              ""
+            )}
+            {/* 
+            Recharts does not support adding ReferenceLine to legend.  The 2 lines below do not
+              appear in the chart, but they do appear in legend
+            */
+// }
+//   {fiftyIsChecked ? (
+//     <Line name="50-day moving avg" stroke="red" />
+//   ) : (
+//     ""
+//   )}
+//   {twoHundredIsChecked ? (
+//     <Line name="200-day moving avg" stroke="green" />
+//   ) : (
+//     ""
+//   )}
+//   <Line
+//     dataKey="price"
+//     name={ticker.toUpperCase()}
+//     dot={false}
+//     activeDot={{ strokeWidth: 0.5, stroke: "blue" }}
+//   />
+//   <Tooltip />
+//   <CartesianGrid />
+//   <Legend />
+// </LineChart> */}
