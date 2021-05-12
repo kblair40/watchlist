@@ -13,7 +13,11 @@ const TIMEMAPPING = {
   "5y": ["year", 5],
 };
 
-const months = [
+export function formatBillions(number) {
+  return (number / 1000000000).toFixed(1) + "B";
+}
+
+export const months = [
   "January",
   "February",
   "March",

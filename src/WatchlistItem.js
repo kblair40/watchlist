@@ -10,9 +10,9 @@ import { withStyles } from "@material-ui/core/styles";
 const styles = {
   WatchlistItem: {
     // marginBottom: "-.3rem",
-    padding: "0.5rem",
+    // padding: "0.5rem",
     // height: "2.5rem",
-    height: "100%",
+    // height: "100%",
   },
   // listItem: {
   //   height: "100%",

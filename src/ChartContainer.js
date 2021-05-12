@@ -81,12 +81,12 @@ class ChartContainer extends Component {
               appear in the chart, but they do appear in legend
             */}
             {fiftyIsChecked ? (
-              <Line name="50-day moving avg" stroke="red" />
+              <Area name="50-day moving avg" stroke="red" />
             ) : (
               ""
             )}
             {twoHundredIsChecked ? (
-              <Line name="200-day moving avg" stroke="green" />
+              <Area name="200-day moving avg" stroke="green" />
             ) : (
               ""
             )}
@@ -95,9 +95,10 @@ class ChartContainer extends Component {
               name={ticker.toUpperCase()}
               dot={false}
               activeDot={{ strokeWidth: 0.5, stroke: "blue" }}
+              fillOpacity={0.3}
             />
             <Tooltip />
-            <CartesianGrid />
+            <CartesianGrid strokeDasharray="3 3" />
             <Legend />
           </AreaChart>
         </ResponsiveContainer>

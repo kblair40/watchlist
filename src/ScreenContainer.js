@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Divider from "@material-ui/core/Divider";
 
 import Summary from "./Summary";
 import ChartContainer from "./ChartContainer";
@@ -12,19 +11,19 @@ import { getData, getMovingAverages } from "./helpers";
 const styles = {
   ScreenContainer: {
     backgroundColor: "",
+    overflow: "auto",
     height: "100vh",
     minHeight: "850px",
     width: "100vw",
     padding: "1rem",
     display: "grid",
-    // justifyItems: "start",
-    justifyContent: "start",
     alignItems: "start",
     gridTemplateAreas: `'wc wc wc'
                         'sumOpt sumOpt sumOpt'`,
     gridTemplateRows: "minmax(20rem, 60vh) minmax(10rem, 40vh)",
     gridTemplateColumns:
       "minmax(5rem, 15vw) minmax(5rem, 15vw) minmax(35rem, 70vw)",
+
     "@media screen and (max-width: 920px)": {
       gridTemplateAreas: `
                         'wc wc'
@@ -40,20 +39,28 @@ const styles = {
     display: "grid",
     gridTemplateRows: "minmax(300px, 100%)",
     gridTemplateColumns: "minmax(200px, 20%) minmax(500px, 80%)",
+
     "@media screen and (max-width: 920px)": {
-      gridTemplateRows: "minmax(300px, 80%)",
+      // gridTemplateRows: "minmax(300px, 80%)",
     },
   },
   summaryAndOptions: {
+    // border: "3px solid green",
+    padding: ".3rem",
+    overflow: "hidden", // NOTE
     gridArea: "sumOpt",
     display: "flex",
+    justifyContent: "center",
+    alignItems: "flex-start",
+    width: "100%",
     minWidth: "600px",
     "@media screen and (max-width: 920px)": {
       flexDirection: "column",
       alignItems: "center",
-      // marginTop: "3rem",
     },
-    // border: "3px solid green",
+    // "@media screen and (max-height: 760px)": {
+    //   alignSelf: "end",
+    // },
   },
   chartOptions: {
     display: "flex",
@@ -64,13 +71,11 @@ const styles = {
     textAlign: "center",
     fontSize: ".9rem",
     width: "40%",
-    // minWidth: "600px",
   },
   chartOptionsLabel: {
     lineHeight: ".5rem",
   },
   summarize: {
-    // justifySelf: "center",
     fontSize: ".9rem",
     width: "60%",
     "@media screen and (max-width: 920px)": {

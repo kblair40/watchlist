@@ -12,31 +12,21 @@ const styles = {
   Watchlist: {
     display: "flex",
     flexDirection: "column",
-    maxHeight: "30rem",
-    justifyContent: "center",
-    alignItems: "center",
   },
   tickerInput: {
-    flex: "1 1 25%",
-    autocomplete: "false",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
   },
   title: {
-    minHeight: "2rem",
-    flex: "1 1 8%",
-    margin: "1rem 0 0 0",
+    margin: ".8rem 0 0 0",
     textAlign: "center",
   },
-
   stockList: {
-    flex: "1 2 72%",
     overflowY: "auto",
     direction: "rtl",
-    height: "100%",
-    minHeight: "5rem",
-    maxHeight: "100%",
+    padding: ".5rem",
+    maxHeight: "18rem",
     display: "grid",
     gridTemplateRows: "repeat(auto-fill, 4.2rem)",
   },
@@ -72,7 +62,7 @@ class Watchlist extends Component {
             Add Ticker
           </InputLabel>
           <Input
-            style={{ automcomplete: "false" }}
+            autoComplete="off"
             placeholder="ex. aapl"
             id="tickerInput"
             onChange={handleTickerChange}

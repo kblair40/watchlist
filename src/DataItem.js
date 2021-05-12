@@ -3,9 +3,14 @@ import { withStyles } from "@material-ui/core/styles";
 
 const styles = {
   data: {
+    // color: "red",
+    // float: "right",
+  },
+  positive: {
+    color: "green",
+  },
+  negative: {
     color: "red",
-    fontWeight: "700",
-    float: "right",
   },
   section: {
     border: "1px solid #bbb",
@@ -14,7 +19,9 @@ const styles = {
     width: "50%",
     padding: ".2rem",
   },
-  category: {},
+  category: {
+    fontWeight: "500",
+  },
 };
 
 class DataItem extends Component {
