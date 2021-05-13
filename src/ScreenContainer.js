@@ -1,86 +1,19 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 
-import Summary from "./Summary";
-import ChartContainer from "./ChartContainer";
-import MovingAverageContainer from "./MovingAverageContainer";
-import SetTimeframe from "./SetTimeframe";
-import Watchlist from "./Watchlist";
-import { getData, getMovingAverages } from "./helpers";
+// import SummaryContainer from "./SummaryContainer";
+import Navbar from "./Navbar";
+// import ChartContainer from "./ChartContainer";
+// import MovingAverageContainer from "./MovingAverageContainer";
+// import SetTimeframe from "./SetTimeframe";
+import { getData, getMovingAverages, DRAWER_WIDTH } from "./helpers";
 
 const styles = {
   ScreenContainer: {
-    backgroundColor: "",
-    overflow: "auto",
-    height: "100vh",
-    minHeight: "850px",
-    width: "100vw",
-    padding: "1rem",
-    display: "grid",
-    alignItems: "start",
-    gridTemplateAreas: `'wc wc wc'
-                        'sumOpt sumOpt sumOpt'`,
-    gridTemplateRows: "minmax(20rem, 60vh) minmax(10rem, 40vh)",
-    gridTemplateColumns:
-      "minmax(5rem, 15vw) minmax(5rem, 15vw) minmax(35rem, 70vw)",
-
-    "@media screen and (max-width: 920px)": {
-      gridTemplateAreas: `
-                        'wc wc'
-                        'sumOpt sumOpt'
-                        `,
-      gridTemplateColumns: "minmax(5rem, 20vw) minmax(15rem, 80vw)",
-      gridTemplateRows: "minmax(10rem, 50vh) minmax(6rem, 50vh)",
-    },
-  },
-  watchlistAndChart: {
-    width: "95%",
-    gridArea: "wc",
-    display: "grid",
-    gridTemplateRows: "minmax(300px, 100%)",
-    gridTemplateColumns: "minmax(200px, 20%) minmax(500px, 80%)",
-
-    "@media screen and (max-width: 920px)": {
-      // gridTemplateRows: "minmax(300px, 80%)",
-    },
-  },
-  summaryAndOptions: {
-    // border: "3px solid green",
-    padding: ".3rem",
-    overflow: "hidden", // NOTE
-    gridArea: "sumOpt",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    width: "100%",
-    minWidth: "600px",
-    "@media screen and (max-width: 920px)": {
-      flexDirection: "column",
-      alignItems: "center",
-    },
-    // "@media screen and (max-height: 760px)": {
-    //   alignSelf: "end",
-    // },
-  },
-  chartOptions: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    lineHeight: ".5rem",
-    textAlign: "center",
-    fontSize: ".9rem",
-    width: "40%",
-  },
-  chartOptionsLabel: {
-    lineHeight: ".5rem",
-  },
-  summarize: {
-    fontSize: ".9rem",
-    width: "60%",
-    "@media screen and (max-width: 920px)": {
-      width: "100%",
-    },
+    // display: "grid",
+    // gridTemplateAreas: `
+    //                     'dr ab ab'
+    //                     `,
   },
 };
 
@@ -119,10 +52,10 @@ class ScreenContainer extends Component {
   }
 
   handleMaCheck(e) {
+    console.log("handleMaCheck CALLED:\n", e);
+    console.log("value?:", e.target.value);
     const { fiftyChecked, twoHundredChecked } = this.state;
     let maClicked = e.target.value;
-    console.log("e:", e);
-    console.log("value?", e.target.value);
     if (maClicked === "50") {
       this.setState({ fiftyIsChecked: !this.state.fiftyIsChecked });
     } else {
@@ -131,6 +64,9 @@ class ScreenContainer extends Component {
   }
 
   deleteTicker(e, ticker) {
+    console.log("DELETE");
+    console.log("Event:", e);
+    console.log("Ticker:", ticker);
     e.stopPropagation();
     this.setState({
       userTickers: this.state.userTickers.filter((tick) => tick !== ticker),
@@ -168,6 +104,7 @@ class ScreenContainer extends Component {
   }
 
   async addTicker(e) {
+    console.log("ADD TICKER CALLED");
     const newTicker = this.state.tickerInput.toLowerCase();
     const isValid = await this.plotData(e, newTicker);
     let [fifty, twoHundred] = await getMovingAverages(newTicker);
@@ -221,31 +158,35 @@ class ScreenContainer extends Component {
       twoHundredPrice,
     } = this.state;
     const { classes } = this.props;
+    // console.log('SCREEN CONTAINER DATA:', data)
     return (
       <div className={classes.ScreenContainer}>
-        <div className={classes.watchlistAndChart}>
-          <Watchlist
+        <div className={classes.navbar}>
+          <Navbar
+            data={data}
+            handleTimeframeChange={this.handleTimeframeChange}
+            handleMaCheck={this.handleMaCheck}
             plotData={this.plotData}
             addTicker={this.addTicker}
             handleTickerChange={this.handleTickerChange}
             handleWatchlistClick={this.handleWatchlistClick}
             userTickers={userTickers}
             deleteTicker={this.deleteTicker}
-          />
-          <ChartContainer
-            priceData={data}
+            ticker={curTicker}
             fiftyIsChecked={fiftyIsChecked}
             twoHundredIsChecked={twoHundredIsChecked}
             fiftyPrice={fiftyPrice}
             twoHundredPrice={twoHundredPrice}
-            ticker={curTicker}
             dataMin={data ? parseFloat(dataMin.toFixed(2)) : null}
             dataMax={data ? parseFloat(dataMax.toFixed(2)) : null}
             timeframe={timeframe}
           />
         </div>
+        {/* <div className={classes.watchlist}>
+          <Watchlist />
+        </div>
         <div className={classes.summaryAndOptions}>
-          {/* <div className={classes.chartOptions}>
+           <div className={classes.chartOptions}>
             <h3 className={classes.chartOptionsLabel}>Chart Options</h3>
             <SetTimeframe
               plotData={this.plotData}
@@ -259,25 +200,22 @@ class ScreenContainer extends Component {
               twoHundredIsChecked={twoHundredIsChecked}
             />
           </div> */}
-          <div className={classes.summarize}>
-            <Summary ticker={curTicker} />
-          </div>
-          <div className={classes.chartOptions}>
-            <h3 className={classes.chartOptionsLabel}>Chart Options</h3>
-            <SetTimeframe
-              plotData={this.plotData}
-              handleTimeframeChange={this.handleTimeframeChange}
-              ticker={curTicker}
-            />
-            <MovingAverageContainer
-              ticker={curTicker}
-              handleCheck={this.handleMaCheck}
-              fiftyIsChecked={fiftyIsChecked}
-              twoHundredIsChecked={twoHundredIsChecked}
-            />
-          </div>
-        </div>
+        {/* <div className={classes.chartOptions}>
+          <h3 className={classes.chartOptionsLabel}>Chart Options</h3>
+          <SetTimeframe
+            plotData={this.plotData}
+            handleTimeframeChange={this.handleTimeframeChange}
+            ticker={curTicker}
+          />
+          <MovingAverageContainer
+            ticker={curTicker}
+            handleCheck={this.handleMaCheck}
+            fiftyIsChecked={fiftyIsChecked}
+            twoHundredIsChecked={twoHundredIsChecked}
+          />
+        </div> */}
       </div>
+      // </div>
     );
   }
 }

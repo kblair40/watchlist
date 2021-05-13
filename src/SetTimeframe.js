@@ -9,36 +9,38 @@ import FormLabel from "@material-ui/core/FormLabel";
 const styles = {
   timeframes: {
     display: "flex",
-    justifyContent: "center",
-    padding: ".3rem",
+    flexWrap: "wrap",
+    // justifyContent: "center",
+    // padding: ".5rem",
+  },
+  timeframeOptions1: {
+    display: "flex",
+    // flexDirection: "column",
+    // flexWrap: "nowrap",
+  },
+  timeframeOptions2: {
+    display: "flex",
+    // flexDirection: "column",
+    // flexWrap: "nowrap",
   },
   timeframeLabel: {
     color: "#222",
-    textAlign: "center",
+    // textAlign: "center",
   },
   radioGroup: {
-    width: "100%",
-    minWidth: "515px",
-    display: "flex",
-    justifyContent: "center",
-    flexWrap: "wrap",
+    // width: "100%",
+    // minWidth: "515px",
+    // display: "flex",
+    // justifyContent: "center",
+    // flexWrap: "wrap",
     "@media screen and (max-width: 920px)": {
       // flexDirection: "column",
       // alignItems: "center",
     },
   },
-  timeframeOptions1: {
-    display: "flex",
-    flexDirection: "column",
-    flexWrap: "wrap",
-  },
-  timeframeOptions2: {
-    display: "flex",
-    flexDirection: "column",
-    flexWrap: "wrap",
-  },
+
   timeframeOption: {
-    height: "2rem",
+    // height: "2rem",
   },
 };
 
@@ -58,13 +60,10 @@ class SetTimeframe extends Component {
   }
 
   render() {
-    const { classes, handleTimeframeChange } = this.props;
+    const { classes } = this.props;
     return (
       <div className={classes.timeframes}>
-        <FormControl
-          // className={classes.timeframes}
-          component="fieldset"
-        >
+        <FormControl component="fieldset">
           <FormLabel className={classes.timeframeLabel} component="legend">
             Timeframe
           </FormLabel>
@@ -74,7 +73,6 @@ class SetTimeframe extends Component {
             row={true}
             onChange={this.handleChange}
             className={classes.radioGroup}
-            // className={classes.timeframes}
           >
             <div className={classes.timeframeOptions1}>
               <FormControlLabel
@@ -123,20 +121,3 @@ class SetTimeframe extends Component {
   }
 }
 export default withStyles(styles)(SetTimeframe);
-
-// const styles = {
-//   timeframes: {
-//     display: "flex",
-//     width: "100%",
-//     justifyContent: "space-between",
-//     maxWidth: "1050px",
-//     minWidth: "275px",
-//     flexWrap: "wrap",
-//   },
-//   timeframeLabel: {
-//     color: "black",
-//   },
-//   radioGroup: {
-//     margin: "0px",
-//   },
-// };

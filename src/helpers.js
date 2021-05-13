@@ -2,6 +2,11 @@ import yahooFinance from "yahoo-finance2";
 import dayjs from "dayjs";
 
 // 1d, 10d, 1m, 3m, 6m, 1y, 3y, 5y
+export const DRAWER_WIDTH = 240;
+
+export const POSITIVE = "#48bb78";
+export const NEGATIVE = "#C70039";
+
 const TIMEMAPPING = {
   "5d": ["day", 5],
   "10d": ["day", 10],
@@ -32,6 +37,21 @@ export const months = [
   "December",
 ];
 
+export function formatCardDate() {
+  let datetimeString = dayjs().format("MMM DD h:mm");
+  let tz = timezones[dayjs().format("ZZ")];
+
+  datetimeString += ` ${tz}`;
+  return datetimeString;
+}
+
+let timezones = {
+  "-0500": "CST",
+  "-0600": "EST",
+  "-0400": "MT",
+  "-0300": "PST",
+};
+
 export async function getData(ticker, timeframe) {
   let toSub = TIMEMAPPING[timeframe];
   let startDate = dayjs().subtract(toSub[1], toSub[0])["$d"];
@@ -57,12 +77,9 @@ export async function getData(ticker, timeframe) {
   return [data, min * 0.9, max * 1.1];
 }
 
-// twoHundredDayAverage, fiftyDayAverage
 export async function getMovingAverages(ticker) {
   let quoteSum = await yahooFinance.quoteSummary(ticker);
-  // console.log("quoteSum:", quoteSum.summaryDetail);
   let fifty = quoteSum.summaryDetail.fiftyDayAverage;
   let twoHundred = quoteSum.summaryDetail.twoHundredDayAverage;
-  // console.log("fifty:", fifty, "\ntwoHundred:", twoHundred);
   return [fifty, twoHundred];
 }

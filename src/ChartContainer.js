@@ -16,17 +16,16 @@ import {
 
 const styles = {
   ChartContainer: {
-    // minWidth: "100%",
-    // padding: "1rem",
-    // width: "100%",
+    width: "99%",
   },
 };
 
 class ChartContainer extends Component {
   render() {
-    let { priceData } = { ...this.props };
+    // let { data } = { ...this.props };
     const {
       classes,
+      data,
       dataMin,
       dataMax,
       timeframe,
@@ -36,19 +35,18 @@ class ChartContainer extends Component {
       fiftyPrice,
       twoHundredPrice,
     } = this.props;
-    // console.log("priceData:", priceData);
+    console.log("DATA RECEIVED:", data);
     // CHECK HERE FOR PRICE DATA.  IF NO PRICE DATA, RENDER ERROR MODAL INSTEAD
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer
-          width="100%" // height="100%" // height={450}
-          // height={450}
+          width="100%"
+          height={350}
           // minHeight={400}
-          // minWidth={500}
-          // minWidth="80%"
+          // minWidth={250}
         >
           <AreaChart
-            data={priceData}
+            data={data}
             margin={{
               top: 30,
               right: 15,
@@ -58,7 +56,7 @@ class ChartContainer extends Component {
           >
             <XAxis dataKey="date" />
             <YAxis domain={[dataMin, dataMax]} />
-            {fiftyIsChecked ? (
+            {/* {fiftyIsChecked ? (
               <ReferenceLine
                 y={fiftyPrice}
                 name="50-Day Moving Average"
@@ -75,7 +73,7 @@ class ChartContainer extends Component {
               />
             ) : (
               ""
-            )}
+            )} */}
             {/* 
             Recharts does not support adding ReferenceLine to legend.  The 2 lines below do not
               appear in the chart, but they do appear in legend
@@ -99,7 +97,9 @@ class ChartContainer extends Component {
             />
             <Tooltip />
             <CartesianGrid strokeDasharray="3 3" />
-            <Legend />
+            {/* <Legend /> 
+            Replace with card that will display ticker symbol
+            */}
           </AreaChart>
         </ResponsiveContainer>
       </div>
