@@ -6,6 +6,7 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
@@ -48,6 +49,7 @@ const styles = (theme) => ({
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
+    padding: ".3rem",
   },
   content: {
     flexGrow: 1,
@@ -56,6 +58,9 @@ const styles = (theme) => ({
   customToolbar: {
     display: "flex",
     alignItems: "flex-end",
+  },
+  drawerContainer: {
+    // height: "100%",
   },
 });
 
@@ -66,6 +71,7 @@ class Navbar extends Component {
       drawerOpen: false,
       height: 0,
       appBarWidth: 0,
+      drawerHeight: 0,
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.calcDimensions = this.calcDimensions.bind(this);
@@ -77,21 +83,23 @@ class Navbar extends Component {
 
   calcDimensions() {
     let navHeight = document.getElementById("appBar").clientHeight;
-    // let windowWidth = window.clientWidth;
     let drawerWidth = document.getElementById("useForDrawerWidth").clientWidth;
-    // console.log("HEIGHT: ", navHeight);
     let appBarWidth = document.getElementById("appBar").clientWidth;
     if (this.state.drawerOpen) appBarWidth -= drawerWidth;
-    console.log("appBarWidth:", appBarWidth);
-    console.log("WIDTH:", drawerWidth);
     if (
       navHeight !== this.state.height ||
       appBarWidth !== this.state.appBarWidth
     ) {
-      // console.log("SETTING STATE:", navHeight);
-      this.setState({ height: navHeight, appBarWidth: appBarWidth });
+      // console.log(
+      //   "SETTING STATE:",
+      //   `\nnavHeight: ${navHeight}`,
+      //   `\nappBarWidth: ${appBarWidth}`
+      // );
+      this.setState({
+        height: navHeight,
+        appBarWidth: appBarWidth,
+      });
     }
-    return;
   }
 
   componentDidMount() {
@@ -120,18 +128,21 @@ class Navbar extends Component {
       timeframe,
       handleMaCheck,
       handleTimeframeChange,
+      tickerInput,
     } = this.props;
-    const { height, appBarWidth, drawerOpen } = this.state;
-    console.log("STATE:", appBarWidth);
+    const { height, appBarWidth, drawerOpen, drawerHeight } = this.state;
+    // console.log("STATE:", appBarWidth);
     const drawer = (
       <div>
         <div className={classes.toolbar} id="useForDrawerWidth" />
         <TickerInput
           handleTickerChange={handleTickerChange}
           addTicker={addTicker}
+          tickerInput={tickerInput}
         />
-        <Divider />
+        {/* <Divider /> */}
         <Watchlist
+          drawerHeight={drawerHeight}
           handleClick={handleWatchlistClick}
           userTickers={userTickers}
           deleteTicker={deleteTicker}

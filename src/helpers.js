@@ -115,8 +115,13 @@ export async function getData(ticker, timeframe) {
 }
 
 export async function getMovingAverages(ticker) {
-  let quoteSum = await yahooFinance.quoteSummary(ticker);
-  let fifty = quoteSum.summaryDetail.fiftyDayAverage;
-  let twoHundred = quoteSum.summaryDetail.twoHundredDayAverage;
-  return [fifty, twoHundred];
+  try {
+    let quoteSum = await yahooFinance.quoteSummary(ticker);
+    let fifty = quoteSum.summaryDetail.fiftyDayAverage;
+    let twoHundred = quoteSum.summaryDetail.twoHundredDayAverage;
+    return [fifty, twoHundred];
+  } catch (e) {
+    console.log(`ERROR - UNABLE TO RETRIEVE MOVING AVERAGES FOR ${ticker}`);
+    return [null, null];
+  }
 }

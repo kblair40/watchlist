@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import SimpleReactValidator from "simple-react-validator";
+import TextField from "@material-ui/core/TextField";
+
 import green from "@material-ui/core/colors/green";
 import Icon from "@material-ui/core/Icon";
 
@@ -26,8 +27,8 @@ const styles = (theme) => ({
     },
   },
   tickerInput: {
-    width: "90%",
-    marginBottom: "2px",
+    // width: "90%",
+    // marginBottom: "2px",
   },
   inputContainer: {
     display: "flex",
@@ -39,24 +40,51 @@ const styles = (theme) => ({
 });
 // handleTickerChange={handleTickerChange}
 // addTicker={addTicker}
+// const TEST_REGEX = /^[a-z]{1,4}$/i;
+
 class TickerInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      tickerInput: "",
+      error: false,
+    };
+    this.validator = new SimpleReactValidator();
+    this.handleChange = this.handleChange.bind(this);
+    this.validate = this.validate.bind(this);
+  }
+
+  handleChange(e) {
+    const { handleTickerChange } = this.props;
+    handleTickerChange(e);
+    this.setState({ tickerInput: e.target.value });
+  }
+
+  validate() {}
+
   render() {
-    const { classes, handleTickerChange, addTicker } = this.props;
+    // const { tickerInput } = this.props;
+
+    const { classes, tickerInput, handleTickerChange, addTicker } = this.props;
+    console.log("CURRENT INPUT:", tickerInput);
+    // const { tickerInput, errorText, userHasTyped, error } = this.state;
+    // console.log("TICKER ERROR?", this.state.error);
     return (
       <div>
-        <FormControl component="form" className={classes.textField}>
+        <FormControl
+          component="form"
+          // error={error}
+          className={classes.textField}
+        >
           <div className={classes.inputContainer}>
             <InputLabel className={classes.inputLabel} htmlFor="tickerInput">
               Add Ticker
             </InputLabel>
-
             <Input
-              id="tickerInput"
               type="text"
               className={classes.tickerInput}
-              // value=""
               margin="dense"
-              error={false}
+              // error={false}
               onChange={handleTickerChange}
               endAdornment={
                 <InputAdornment position="end">

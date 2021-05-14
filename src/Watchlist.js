@@ -15,40 +15,44 @@ const styles = {
       color: red[800],
     },
   },
+  watchlistContainer: {
+    // padding: '.5rem',
+    // maxHeight: "300px",
+    overflowY: "auto",
+  },
 };
 class Watchlist extends Component {
-  render() {
-    const { classes, handleClick, userTickers, deleteTicker, plotData } =
-      this.props;
-    return (
-      <List>
-        {userTickers.map((ticker) => (
-          <ListItem button onClick={handleClick}>
-            <ListItemIcon>
-              <DeleteForeverOutlinedIcon
-                onClick={(e) => deleteTicker(e, ticker)}
-                className={classes.trash}
-              />
-            </ListItemIcon>
-            <ListItemText primary={ticker.toUpperCase()} />
-          </ListItem>
-        ))}
-      </List>
-    );
+  setWatchlistHeight() {
+    // const { drawerHeight } = this.props;
+    return this.props.drawerHeight - 300;
   }
-}
-
-{
-  /* <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
+  render() {
+    const {
+      classes,
+      handleClick,
+      userTickers,
+      deleteTicker,
+      plotData,
+      drawerHeight,
+    } = this.props;
+    return (
+      <div style={{ maxHeight: this.setWatchlistHeight }}>
+        <List className={classes.watchlistContainer}>
+          {userTickers.map((ticker) => (
+            <ListItem button onClick={handleClick}>
               <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                <DeleteForeverOutlinedIcon
+                  onClick={(e) => deleteTicker(e, ticker)}
+                  className={classes.trash}
+                />
               </ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={ticker.toUpperCase()} />
             </ListItem>
           ))}
-        </List> */
+        </List>
+      </div>
+    );
+  }
 }
 
 export default withStyles(styles)(Watchlist);

@@ -6,6 +6,8 @@ import Navbar from "./Navbar";
 import { getData, getMovingAverages, DRAWER_WIDTH } from "./helpers";
 import { ContactsOutlined } from "@material-ui/icons";
 
+const TEST_REGEX = /^[a-z]{1,4}$/i;
+
 const styles = {
   ScreenContainer: {},
 };
@@ -25,6 +27,7 @@ class ScreenContainer extends Component {
       fiftyIsChecked: false,
       twoHundredPrice: null,
       twoHundredIsChecked: false,
+      isValidInput: false,
     };
     this.handleTimeframeChange = this.handleTimeframeChange.bind(this);
     this.handleTickerChange = this.handleTickerChange.bind(this);
@@ -106,22 +109,44 @@ class ScreenContainer extends Component {
   }
 
   handleTickerChange(e) {
-    this.setState({ tickerInput: e.target.value });
+    let isValidInput = TEST_REGEX.test(e.target.value);
+    this.setState({ isValidInput: isValidInput, tickerInput: e.target.value });
   }
 
   async addTicker(e) {
     console.log("ADD TICKER CALLED");
+    console.log(e);
     const newTicker = this.state.tickerInput.toLowerCase();
     const isValid = await this.plotData(e, newTicker);
     let [fifty, twoHundred] = await getMovingAverages(newTicker);
+    if (!fifty || !twoHundred) {
+      console.log("ERROR! - FAILED TO RETRIEVE MOVING AVERAGES");
+    }
+    // if (this.state.isValid && !this.state.userTickers.includes(newTicker)) {
+    //   console.log("SETTING STATE!");
+    //   this.setState(
+    //     {
+    //       userTickers: [...this.state.userTickers, newTicker],
+    //       curTicker: newTicker,
+    //       fiftyPrice: fifty,
+    //       twoHundredPrice: twoHundred,
+    //     },
+    //     () => {
+    //       this.plotData(e, this.state.curTicker, this.state.timeframe);
+    //     }
+    //   );
+    // }
     if (isValid && !this.state.userTickers.includes(newTicker)) {
       this.setState({
         userTickers: [...this.state.userTickers, newTicker],
-        curTicker: this.state.tickerInput,
+        // curTicker: this.state.tickerInput,
+        curTicker: newTicker,
         fiftyPrice: fifty,
         twoHundredPrice: twoHundred,
       });
     }
+    this.forceUpdate();
+    return;
   }
 
   async plotData(e, ticker, timeframe) {
@@ -131,10 +156,12 @@ class ScreenContainer extends Component {
     // checks if timeframe was passed as argument.  If it was (if), ticker would've been provided
     //  as an argument.  If it was not (else), either a new ticker was added or a ticker on the
     //  watchlist was selected and ticker/timeframe must be retrieved from state.
+    console.log("TIMEFRAME:", timeframe);
     if (timeframe) {
       data = await getData(ticker, timeframe);
     } else {
-      data = await getData(this.state.tickerInput, this.state.timeframe);
+      // data = await getData(this.state.tickerInput, this.state.timeframe);
+      data = await getData(ticker, this.state.timeframe);
     }
     let priceData, min, max;
     if (data) {
@@ -146,7 +173,6 @@ class ScreenContainer extends Component {
       data: priceData,
       dataMin: Math.min(min, this.state.fiftyPrice * 0.9),
       dataMax: Math.max(max, this.state.twoHundredPrice * 1.1),
-      // dataMax: max,
     });
     return true;
   }
@@ -163,6 +189,7 @@ class ScreenContainer extends Component {
       twoHundredIsChecked,
       fiftyPrice,
       twoHundredPrice,
+      tickerInput,
     } = this.state;
     const { classes } = this.props;
     // console.log('SCREEN CONTAINER DATA:', data)
@@ -171,6 +198,7 @@ class ScreenContainer extends Component {
         <div className={classes.navbar}>
           <Navbar
             data={data}
+            tickerInput={tickerInput}
             handleTimeframeChange={this.handleTimeframeChange}
             handleMaCheck={this.handleMaCheck}
             plotData={this.plotData}

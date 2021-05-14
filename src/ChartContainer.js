@@ -16,7 +16,7 @@ import {
 
 const styles = {
   ChartContainer: {
-    width: "99%",
+    // width: "100%",
   },
 };
 
@@ -45,9 +45,9 @@ class ChartContainer extends Component {
             data={data}
             margin={{
               top: 15,
-              right: 10,
+              // right: 10,
               bottom: 10,
-              left: 10,
+              // left: 10,
             }}
           >
             <XAxis dataKey="date" />
