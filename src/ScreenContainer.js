@@ -3,18 +3,11 @@ import { withStyles } from "@material-ui/core/styles";
 
 // import SummaryContainer from "./SummaryContainer";
 import Navbar from "./Navbar";
-// import ChartContainer from "./ChartContainer";
-// import MovingAverageContainer from "./MovingAverageContainer";
-// import SetTimeframe from "./SetTimeframe";
 import { getData, getMovingAverages, DRAWER_WIDTH } from "./helpers";
+import { ContactsOutlined } from "@material-ui/icons";
 
 const styles = {
-  ScreenContainer: {
-    // display: "grid",
-    // gridTemplateAreas: `
-    //                     'dr ab ab'
-    //                     `,
-  },
+  ScreenContainer: {},
 };
 
 class ScreenContainer extends Component {
@@ -42,24 +35,30 @@ class ScreenContainer extends Component {
     this.handleMaCheck = this.handleMaCheck.bind(this);
   }
 
-  async setMovingAverages(ticker = null) {
-    let [fifty, twoHundred] = await getMovingAverages(this.state.curTicker);
-    console.log("MA:", [fifty, twoHundred]);
-    this.setState({ fiftyPrice: fifty, twoHundredPrice: twoHundred });
-  }
-  async componentDidMount() {
-    this.setMovingAverages();
-  }
-
   handleMaCheck(e) {
     console.log("handleMaCheck CALLED:\n", e);
-    console.log("value?:", e.target.value);
+    console.log("MA CLICKED:", e.target.value);
+    e.stopPropagation();
     const { fiftyChecked, twoHundredChecked } = this.state;
     let maClicked = e.target.value;
-    if (maClicked === "50") {
-      this.setState({ fiftyIsChecked: !this.state.fiftyIsChecked });
+
+    if (Array.isArray(maClicked)) {
+      if (maClicked.includes("50") && maClicked.includes("200")) {
+        this.setState({ fiftyIsChecked: true, twoHundredIsChecked: true });
+      } else if (maClicked.includes("50")) {
+        this.setState({ fiftyIsChecked: true, twoHundredIsChecked: false });
+      } else if (maClicked.includes("200")) {
+        this.setState({ fiftyIsChecked: false, twoHundredIsChecked: true });
+      } else {
+        this.setState({ fiftyIsChecked: false, twoHundredIsChecked: false });
+      }
+      return;
     } else {
-      this.setState({ twoHundredIsChecked: !this.state.twoHundredIsChecked });
+      if (maClicked === "50") {
+        this.setState({ fiftyIsChecked: !this.state.fiftyIsChecked });
+      } else {
+        this.setState({ twoHundredIsChecked: !this.state.twoHundredIsChecked });
+      }
     }
   }
 
@@ -74,20 +73,27 @@ class ScreenContainer extends Component {
   }
 
   async handleWatchlistClick(e) {
+    // console.log("HANDLE WATCHLIST CLICK");
+    // console.log("ticker:", e.target.innerText);
     const ticker = e.target.innerText;
-    let [fifty, twoHundred] = await getMovingAverages(ticker);
-    let [priceData, min, max] = await getData(
-      ticker.toLowerCase(),
-      this.state.timeframe
-    );
-    this.setState({
-      curTicker: ticker,
-      data: priceData,
-      dataMin: min,
-      dataMax: max,
-      fiftyPrice: fifty,
-      twoHundredPrice: twoHundred,
-    });
+    try {
+      let [fifty, twoHundred] = await getMovingAverages(ticker);
+      let [priceData, min, max] = await getData(
+        ticker.toLowerCase(),
+        this.state.timeframe
+      );
+      this.setState({
+        curTicker: ticker,
+        data: priceData,
+        dataMin: Math.min(min, fifty * 0.9),
+        dataMax: Math.max(max, twoHundred * 1.1),
+        fiftyPrice: fifty,
+        twoHundredPrice: twoHundred,
+      });
+    } catch (e) {
+      console.log("ERROR RETRIEVING FROM HANDLE WATCHLIST CLICK");
+      console.log(e);
+    }
   }
 
   async handleTimeframeChange(e) {
@@ -138,8 +144,9 @@ class ScreenContainer extends Component {
     }
     this.setState({
       data: priceData,
-      dataMin: min,
-      dataMax: max,
+      dataMin: Math.min(min, this.state.fiftyPrice * 0.9),
+      dataMax: Math.max(max, this.state.twoHundredPrice * 1.1),
+      // dataMax: max,
     });
     return true;
   }

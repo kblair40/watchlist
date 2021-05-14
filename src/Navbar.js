@@ -12,8 +12,9 @@ import { withStyles } from "@material-ui/core/styles";
 import Watchlist from "./Watchlist";
 import TickerInput from "./TickerInput";
 import ChartContainer from "./ChartContainer";
-import SummaryContainer from "./SummaryContainer";
 import ChartOptions from "./ChartOptions";
+import SummaryCard from "./SummaryCard";
+import classNames from "classnames";
 
 const drawerWidth = 240;
 
@@ -28,6 +29,7 @@ const styles = (theme) => ({
     },
   },
   appBar: {
+    padding: ".5rem",
     marginLeft: drawerWidth,
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`,
@@ -51,24 +53,54 @@ const styles = (theme) => ({
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
   },
+  customToolbar: {
+    display: "flex",
+    alignItems: "flex-end",
+  },
 });
 
 class Navbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mobileOpen: false,
+      drawerOpen: false,
+      height: 0,
+      appBarWidth: 0,
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
+    this.calcDimensions = this.calcDimensions.bind(this);
   }
 
   handleDrawerToggle() {
-    this.setState({ mobileOpen: !this.state.mobileOpen });
+    this.setState({ drawerOpen: !this.state.drawerOpen });
+  }
+
+  calcDimensions() {
+    let navHeight = document.getElementById("appBar").clientHeight;
+    // let windowWidth = window.clientWidth;
+    let drawerWidth = document.getElementById("useForDrawerWidth").clientWidth;
+    // console.log("HEIGHT: ", navHeight);
+    let appBarWidth = document.getElementById("appBar").clientWidth;
+    if (this.state.drawerOpen) appBarWidth -= drawerWidth;
+    console.log("appBarWidth:", appBarWidth);
+    console.log("WIDTH:", drawerWidth);
+    if (
+      navHeight !== this.state.height ||
+      appBarWidth !== this.state.appBarWidth
+    ) {
+      // console.log("SETTING STATE:", navHeight);
+      this.setState({ height: navHeight, appBarWidth: appBarWidth });
+    }
+    return;
+  }
+
+  componentDidMount() {
+    this.calcDimensions();
+    window.addEventListener("resize", this.calcDimensions);
   }
 
   render() {
     let { data } = { ...this.props };
-    console.log("NAVBAR DATA:", data);
     const {
       classes,
       theme,
@@ -89,10 +121,11 @@ class Navbar extends Component {
       handleMaCheck,
       handleTimeframeChange,
     } = this.props;
-
+    const { height, appBarWidth, drawerOpen } = this.state;
+    console.log("STATE:", appBarWidth);
     const drawer = (
       <div>
-        <div className={classes.toolbar} />
+        <div className={classes.toolbar} id="useForDrawerWidth" />
         <TickerInput
           handleTickerChange={handleTickerChange}
           addTicker={addTicker}
@@ -109,8 +142,13 @@ class Navbar extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar color="default" position="fixed" className={classes.appBar}>
-          <Toolbar>
+        <AppBar
+          id="appBar"
+          color="default"
+          position="fixed"
+          className={classes.appBar}
+        >
+          <Toolbar className={classes.customToolbar}>
             <IconButton
               color="inherit"
               aria-label="Open drawer"
@@ -121,11 +159,14 @@ class Navbar extends Component {
             </IconButton>
             <div className={classes.optionsContainer}>
               <ChartOptions
+                appBarWidth={appBarWidth}
                 handleMaCheck={handleMaCheck}
                 fiftyIsChecked={fiftyIsChecked}
                 twoHundredIsChecked={twoHundredIsChecked}
                 handleTimeframeChange={handleTimeframeChange}
                 plotData={plotData}
+                ticker={ticker}
+                timeframe={timeframe}
               />
             </div>
 
@@ -138,7 +179,7 @@ class Navbar extends Component {
               container={this.props.container}
               variant="temporary"
               anchor={theme.direction === "rtl" ? "right" : "left"}
-              open={this.state.mobileOpen}
+              open={this.state.drawerOpen}
               onClose={this.handleDrawerToggle}
               classes={{
                 paper: classes.drawerPaper,
@@ -159,32 +200,29 @@ class Navbar extends Component {
             </Drawer>
           </Hidden>
         </nav>
-        <main className={classes.content}>
+        <main className={classes.content} style={{ top: height - 64 }}>
           <div className={classes.toolbar} />
-          <ChartContainer
-            data={data}
-            fiftyIsChecked={fiftyIsChecked}
-            twoHundredIsChecked={twoHundredIsChecked}
-            fiftyPrice={fiftyPrice}
-            twoHundredPrice={twoHundredPrice}
-            ticker={ticker}
-            dataMin={data ? parseFloat(dataMin.toFixed(2)) : null}
-            dataMax={data ? parseFloat(dataMax.toFixed(2)) : null}
-            timeframe={timeframe}
-          />
-          <SummaryContainer ticker={ticker} />
+          <div className={classes.chartArea}>
+            <ChartContainer
+              navHeight={height}
+              data={data}
+              fiftyIsChecked={fiftyIsChecked}
+              twoHundredIsChecked={twoHundredIsChecked}
+              fiftyPrice={fiftyPrice}
+              twoHundredPrice={twoHundredPrice}
+              ticker={ticker}
+              dataMin={data ? parseFloat(dataMin.toFixed(2)) : null}
+              dataMax={data ? parseFloat(dataMax.toFixed(2)) : null}
+              timeframe={timeframe}
+            />
+          </div>
+          <div className={classes.summary}>
+            <SummaryCard ticker={ticker} />
+          </div>
         </main>
       </div>
     );
   }
 }
-
-// Navbar.propTypes = {
-//   classes: PropTypes.object.isRequired,
-//   // Injected by the documentation to work in an iframe.
-//   // You won't need it on your project.
-//   container: PropTypes.object,
-//   theme: PropTypes.object.isRequired,
-// };
 
 export default withStyles(styles, { withTheme: true })(Navbar);

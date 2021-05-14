@@ -34,29 +34,25 @@ class ChartContainer extends Component {
       twoHundredIsChecked,
       fiftyPrice,
       twoHundredPrice,
+      navHeight,
     } = this.props;
-    console.log("DATA RECEIVED:", data);
+    let chartHeight = 400 - navHeight;
     // CHECK HERE FOR PRICE DATA.  IF NO PRICE DATA, RENDER ERROR MODAL INSTEAD
     return (
       <div className={classes.ChartContainer}>
-        <ResponsiveContainer
-          width="100%"
-          height={350}
-          // minHeight={400}
-          // minWidth={250}
-        >
+        <ResponsiveContainer width="99%" height={350} maxHeight={350}>
           <AreaChart
             data={data}
             margin={{
-              top: 30,
-              right: 15,
+              top: 15,
+              right: 10,
               bottom: 10,
-              left: 20,
+              left: 10,
             }}
           >
             <XAxis dataKey="date" />
             <YAxis domain={[dataMin, dataMax]} />
-            {/* {fiftyIsChecked ? (
+            {fiftyIsChecked ? (
               <ReferenceLine
                 y={fiftyPrice}
                 name="50-Day Moving Average"
@@ -73,11 +69,9 @@ class ChartContainer extends Component {
               />
             ) : (
               ""
-            )} */}
-            {/* 
-            Recharts does not support adding ReferenceLine to legend.  The 2 lines below do not
-              appear in the chart, but they do appear in legend
-            */}
+            )}
+            {/* Recharts does not support adding ReferenceLine to legend.  The 2 lines below do not
+              appear in the chart, but they do appear in legend */}
             {fiftyIsChecked ? (
               <Area name="50-day moving avg" stroke="red" />
             ) : (

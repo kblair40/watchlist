@@ -1,31 +1,35 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import yahooFinance from "yahoo-finance2";
 import classNames from "classnames";
-import { formatCardDate, POSITIVE, NEGATIVE } from "./helpers";
+import {
+  formatMarketCap,
+  formatExchange,
+  formatCardDate,
+  formatPE,
+  formatDividend,
+  POSITIVE,
+  NEGATIVE,
+} from "./helpers";
 
 const styles = {
-  card: {
+  SummaryCard: {
     minWidth: 275,
-    height: "100%",
-    overflow: "scroll",
+    // display: "flex",
+    // flexDirection: "column",
+    // overflowY: "auto",
+    // zIndex: 30,
+    // height: "100%",
+    // minHeight: "150px",
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
-  },
-  title: {
-    fontSize: 14,
-  },
-  pos: {
-    marginBottom: 12,
+  curInfo: {
+    alignItems: "baseline",
+    display: "flex",
   },
   info: {
     display: "flex",
@@ -42,11 +46,66 @@ const styles = {
     fontSize: "1.8rem",
   },
 };
-class SummaryCard extends Component {
+class SummaryCard extends PureComponent {
+  constructor(props) {
+    // console.log("LOGGING PROPS:", props);
+    super(props);
+    this.state = {
+      ticker: null,
+      marketCap: null,
+      shortName: null,
+      regularMarketPreviousClose: null,
+      trailingPE: null,
+      regularMarketOpen: null,
+      regularMarketDayLow: null,
+      regularMarketDayHigh: null,
+      regularMarketPrice: null,
+      trailingAnnualDividendYield: null,
+      regularMarketChangePercent: null,
+      fullExchangeName: null,
+    };
+  }
+  async componentDidUpdate() {
+    let response = await yahooFinance.quote(this.props.ticker);
+    console.log("response:", response);
+    this.setState({
+      marketCap: response.marketCap,
+      shortName: response.shortName,
+      regularMarketPreviousClose: response.regularMarketPreviousClose,
+      trailingPE: response.trailingPE,
+      regularMarketOpen: response.regularMarketOpen,
+      regularMarketDayLow: response.regularMarketDayLow,
+      regularMarketDayHigh: response.regularMarketDayHigh,
+      regularMarketPrice: response.regularMarketPrice,
+      trailingAnnualDividendYield: response.trailingAnnualDividendYield,
+      regularMarketChangePercent: response.regularMarketChangePercent,
+      fullExchangeName: response.fullExchangeName,
+      ticker: this.props.ticker,
+    });
+  }
+  async componentDidMount() {
+    console.log("RECEIVED:");
+    console.log(this.props);
+    let response = await yahooFinance.quote(this.props.ticker);
+    console.log("response:", response);
+    this.setState({
+      marketCap: response.marketCap,
+      shortName: response.shortName,
+      regularMarketPreviousClose: response.regularMarketPreviousClose,
+      trailingPE: response.trailingPE,
+      regularMarketOpen: response.regularMarketOpen,
+      regularMarketDayLow: response.regularMarketDayLow,
+      regularMarketDayHigh: response.regularMarketDayHigh,
+      regularMarketPrice: response.regularMarketPrice,
+      trailingAnnualDividendYield: response.trailingAnnualDividendYield,
+      regularMarketChangePercent: response.regularMarketChangePercent,
+      fullExchangeName: response.fullExchangeName,
+      ticker: this.props.ticker,
+    });
+  }
+
   render() {
     const {
-      classes,
-      ticker,
       marketCap,
       shortName,
       regularMarketPreviousClose,
@@ -57,38 +116,49 @@ class SummaryCard extends Component {
       regularMarketPrice,
       trailingAnnualDividendYield,
       regularMarketChangePercent,
-    } = this.props;
-
+      fullExchangeName,
+    } = this.state;
+    const { classes, ticker } = this.props;
+    let cap = formatMarketCap(marketCap);
+    let exchangeName = formatExchange(fullExchangeName);
+    let pe = formatPE(trailingPE);
+    let div = formatDividend(trailingAnnualDividendYield);
     let now = formatCardDate();
     let posToday = regularMarketPrice > regularMarketOpen;
-    console.log("posToday:", posToday);
     return (
-      <Card className={classes.card}>
+      <Card className={classes.SummaryCard}>
         <CardContent>
           <Typography variant="h5">{shortName}</Typography>
           <Typography component="p" gutterBottom>
-            {`NYSE:${ticker.toUpperCase()} - ${now}`}
+            {`${exchangeName}:${ticker.toUpperCase()} - ${now}`}
           </Typography>
           <Typography component="p" gutterBottom>
-            <span className={classes.curPrice}>{regularMarketPrice}</span>
             {posToday ? (
-              <span>
+              <span className={classes.curInfo}>
+                <span className={classes.curPrice}>{regularMarketPrice}</span>
+                &nbsp;
                 <ArrowUpward className={classes.pos} />
+                &nbsp;
                 <span className={classes.pos}>
                   {(regularMarketPrice - regularMarketOpen).toFixed(3)}
                 </span>
+                &nbsp;
                 <span className={classes.pos}>
                   ({regularMarketChangePercent.toFixed(3)}%)
                 </span>
               </span>
             ) : (
-              <span>
+              <span className={classes.curInfo}>
+                <span className={classes.curPrice}>{regularMarketPrice}</span>
+                &nbsp;
                 <ArrowDownward className={classes.neg} />
+                &nbsp;
                 <span className={classes.neg}>
                   {(regularMarketPrice - regularMarketOpen).toFixed(3)}
                 </span>
+                &nbsp;
                 <span className={classes.neg}>
-                  {/* ({regularMarketChangePercent.toFixed(3)}%) */}(
+                  {/* ({regularMarketChangePercent.toFixed(3)}%)( */}(
                   {regularMarketChangePercent}%)
                 </span>
               </span>
@@ -108,14 +178,14 @@ class SummaryCard extends Component {
               <span>Low</span> <span>{regularMarketDayLow}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>Market Cap</span> <span>{marketCap}</span>
+              <span>Market Cap</span> <span>{cap}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>P/E ratio</span> <span>{trailingPE}</span>
+              <span>P/E ratio</span> <span>{pe ? pe : "n/a"}</span>
             </Typography>
             <Typography className={classes.info} component="div">
               <span>Dividend yield </span>
-              <span>{trailingAnnualDividendYield}</span>
+              <span>{div ? div : "n/a"}</span>
             </Typography>
           </div>
         </CardContent>

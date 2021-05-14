@@ -1,23 +1,17 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
+import Select from "@material-ui/core/Select";
 import { getMovingAverages } from "./helpers";
 import MovingAverageContainer from "./MovingAverageContainer";
+import MovingAverageSelect from "./MovingAverageSelect";
 import SetTimeframe from "./SetTimeframe";
+import TimeframeSelect from "./TimeframeSelect";
 
 const styles = {
-  optionsContainer: {
-    // display: "flex",
-    // flexDirection: "column",
-    // alignItems: "flex-start",
-    // justifyContent: "flex-start",
-  },
   ChartOptions: {
     display: "flex",
-    flexWrap: "wrap",
-    // justifyContent: "space-evenly",
+    justifyContent: "space-evenly",
   },
-  maOptions: {},
-  timeframeOptions: {},
 };
 
 class ChartOptions extends Component {
@@ -25,30 +19,50 @@ class ChartOptions extends Component {
     const {
       handleMaCheck,
       classes,
-      handleCheck,
       plotData,
       fiftyIsChecked,
       twoHundredIsChecked,
       handleTimeframeChange,
+      timeframe,
+      ticker,
+      appBarWidth,
     } = this.props;
+    console.log("appBarWidth:", appBarWidth);
     return (
-      //   <div className={classes.optionsContainer}>
       <div className={classes.ChartOptions}>
         <div className={classes.maOptions}>
-          <MovingAverageContainer
-            handleMaCheck={handleMaCheck}
-            fiftyIsChecked={fiftyIsChecked}
-            twoHundredIsChecked={twoHundredIsChecked}
-          />
+          {appBarWidth > 600 ? (
+            <MovingAverageContainer
+              handleMaCheck={handleMaCheck}
+              fiftyIsChecked={fiftyIsChecked}
+              twoHundredIsChecked={twoHundredIsChecked}
+            />
+          ) : (
+            <MovingAverageSelect
+              handleMaCheck={handleMaCheck}
+              fiftyIsChecked={fiftyIsChecked}
+              twoHundredIsChecked={twoHundredIsChecked}
+            />
+          )}
         </div>
         <div className={classes.timeframeOptions}>
-          <SetTimeframe
-            plotData={plotData}
-            handleTimeframeChange={handleTimeframeChange}
-          />
+          {appBarWidth > 1000 ? (
+            <SetTimeframe
+              ticker={ticker}
+              plotData={plotData}
+              handleTimeframeChange={handleTimeframeChange}
+              timeframe={timeframe}
+            />
+          ) : (
+            <TimeframeSelect
+              ticker={ticker}
+              plotData={plotData}
+              handleTimeframeChange={handleTimeframeChange}
+              timeframe={timeframe}
+            />
+          )}
         </div>
       </div>
-      //   </div>
     );
   }
 }

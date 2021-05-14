@@ -5,26 +5,11 @@ import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import { getMovingAverages } from "./helpers";
 
 const styles = {
-  // MovingAverageContainer: {
-  // display: "flex",
-  // flexWrap: "wrap",
-  // flexDirection: "column",
-  // padding: ".5rem",
-  // },
-  // labelAndOptions: {
-  // display: "flex",
-  // alignSelf: "flex-start",
-  // },
-  // maOptionsContainer: {
-  // display: "flex",
-  // },s
   maLabel: {
     color: "#222",
   },
-  lessMargin: {},
 };
 
 class MovingAverageContainer extends Component {
@@ -39,14 +24,13 @@ class MovingAverageContainer extends Component {
   render() {
     const { classes, handleMaCheck, fiftyIsChecked, twoHundredIsChecked } =
       this.props;
-    console.log("handleMaCheck:", handleMaCheck);
     return (
       <div className={classes.MovingAverageContainer}>
         <FormControl className={classes.labelAndOptions} component="fieldset">
           <FormLabel className={classes.maLabel} component="legend">
-            Show Moving Average
+            Moving Average
           </FormLabel>
-          <FormGroup className={classes.maOptionsContainer} row={true}>
+          <FormGroup row={true}>
             <FormControlLabel
               control={
                 <Checkbox

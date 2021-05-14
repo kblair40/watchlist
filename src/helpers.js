@@ -18,6 +18,40 @@ const TIMEMAPPING = {
   "5y": ["year", 5],
 };
 
+export function formatDividend(div) {
+  if (div) {
+    return (div * 100).toFixed(2) + "%";
+  }
+  return null;
+}
+
+export function formatPE(pe) {
+  return pe ? pe.toFixed(2) : null;
+}
+
+export function formatMarketCap(marketCap) {
+  if (marketCap < 1000000000) {
+    // less than $1B
+    return `${(marketCap / 1000000).toFixed(1)}M`;
+  } else if (marketCap < 1000000000000) {
+    // less than $1T
+    return `${(marketCap / 1000000000).toFixed(1)}B`;
+  } else {
+    // Any amount greater than $1T
+    return `${(marketCap / 1000000000000).toFixed(1)}T`;
+  }
+}
+
+export function formatExchange(exchange) {
+  const exchangeFormatter = {
+    NasdaqGS: "Nasdaq",
+  };
+  return exchange in exchangeFormatter ? exchangeFormatter[exchange] : exchange;
+}
+export const exchangeFormatter = {
+  NasdaqGS: "Nasdaq",
+};
+
 export function formatBillions(number) {
   return (number / 1000000000).toFixed(1) + "B";
 }
@@ -40,7 +74,6 @@ export const months = [
 export function formatCardDate() {
   let datetimeString = dayjs().format("MMM DD h:mm");
   let tz = timezones[dayjs().format("ZZ")];
-
   datetimeString += ` ${tz}`;
   return datetimeString;
 }
@@ -67,8 +100,12 @@ export async function getData(ticker, timeframe) {
   let max = rawData[0].adjClose;
   let data = [];
   for (let obj of rawData) {
-    if (obj.adjClose < min) min = obj.adjClose;
-    if (obj.adjClose > max) max = obj.adjClose;
+    if (obj.adjClose < min) {
+      min = obj.adjClose;
+    }
+    if (obj.adjClose > max) {
+      max = obj.adjClose;
+    }
     data.push({
       date: `${months[obj.date.getMonth()]}-${obj.date.getDate()}`,
       price: parseFloat(obj.adjClose.toFixed(2)),

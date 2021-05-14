@@ -8,39 +8,14 @@ import FormLabel from "@material-ui/core/FormLabel";
 
 const styles = {
   timeframes: {
-    display: "flex",
-    flexWrap: "wrap",
-    // justifyContent: "center",
-    // padding: ".5rem",
-  },
-  timeframeOptions1: {
-    display: "flex",
-    // flexDirection: "column",
-    // flexWrap: "nowrap",
-  },
-  timeframeOptions2: {
-    display: "flex",
-    // flexDirection: "column",
-    // flexWrap: "nowrap",
+    whiteSpace: "nowrap",
   },
   timeframeLabel: {
     color: "#222",
-    // textAlign: "center",
   },
   radioGroup: {
-    // width: "100%",
-    // minWidth: "515px",
-    // display: "flex",
-    // justifyContent: "center",
-    // flexWrap: "wrap",
-    "@media screen and (max-width: 920px)": {
-      // flexDirection: "column",
-      // alignItems: "center",
-    },
-  },
-
-  timeframeOption: {
-    // height: "2rem",
+    display: "flex",
+    flexWrap: "nowrap",
   },
 };
 
@@ -53,14 +28,14 @@ class SetTimeframe extends Component {
   async handleChange(e) {
     const { ticker, handleTimeframeChange, plotData } = this.props;
     handleTimeframeChange(e);
-    // plotData(e);
-    // if (ticker.length) {
-    //   plotData(e);
-    // }
+    plotData(e);
+    if (ticker.length) {
+      plotData(e);
+    }
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, timeframe } = this.props;
     return (
       <div className={classes.timeframes}>
         <FormControl component="fieldset">
@@ -71,49 +46,16 @@ class SetTimeframe extends Component {
             aria-label="Timeframe"
             name="timeframe"
             row={true}
+            value={timeframe}
             onChange={this.handleChange}
             className={classes.radioGroup}
           >
-            <div className={classes.timeframeOptions1}>
-              <FormControlLabel
-                className={classes.timeframeOption}
-                value="5d"
-                control={<Radio />}
-                label="5 Days"
-              />
-              <FormControlLabel
-                className={classes.timeframeOption}
-                value="10d"
-                control={<Radio />}
-                label="10 Days"
-              />
-              <FormControlLabel
-                className={classes.timeframeOption}
-                value="1m"
-                control={<Radio />}
-                label="1 Month"
-              />
-            </div>
-            <div className={classes.timeframeOptions2}>
-              <FormControlLabel
-                className={classes.timeframeOption}
-                value="6m"
-                control={<Radio />}
-                label="6 Months"
-              />
-              <FormControlLabel
-                className={classes.timeframeOption}
-                value="1y"
-                control={<Radio />}
-                label="1 Year"
-              />
-              <FormControlLabel
-                className={classes.timeframeOption}
-                value="5y"
-                control={<Radio />}
-                label="5 Years"
-              />
-            </div>
+            <FormControlLabel value="5d" control={<Radio />} label="5 Days" />
+            <FormControlLabel value="10d" control={<Radio />} label="10 Days" />
+            <FormControlLabel value="1m" control={<Radio />} label="1 Month" />
+            <FormControlLabel value="6m" control={<Radio />} label="6 Months" />
+            <FormControlLabel value="1y" control={<Radio />} label="1 Year" />
+            <FormControlLabel value="5y" control={<Radio />} label="5 Years" />
           </RadioGroup>
         </FormControl>
       </div>
