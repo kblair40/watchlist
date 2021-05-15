@@ -129,6 +129,9 @@ class Navbar extends Component {
       handleMaCheck,
       handleTimeframeChange,
       tickerInput,
+      isValidInput,
+      handleInputBlur,
+      handleInputFocus,
     } = this.props;
     const { height, appBarWidth, drawerHeight } = this.state;
     const drawer = (
@@ -138,6 +141,9 @@ class Navbar extends Component {
           handleTickerChange={handleTickerChange}
           addTicker={addTicker}
           tickerInput={tickerInput}
+          isValidInput={isValidInput}
+          handleInputBlur={handleInputBlur}
+          handleInputFocus={handleInputFocus}
         />
         <Watchlist
           drawerHeight={drawerHeight}

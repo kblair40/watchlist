@@ -84,10 +84,7 @@ class SummaryCard extends PureComponent {
     });
   }
   async componentDidMount() {
-    // console.log("RECEIVED:");
-    // console.log(this.props);
     let response = await yahooFinance.quote(this.props.ticker);
-    // console.log("response:", response);
     if (response) {
       this.setState({
         marketCap: response.marketCap,

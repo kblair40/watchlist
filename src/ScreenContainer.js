@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-// import SummaryContainer from "./SummaryContainer";
 import Navbar from "./Navbar";
 import {
   getData,
@@ -8,7 +7,6 @@ import {
   validateTickerInput,
   DRAWER_WIDTH,
 } from "./helpers";
-import { ContactsOutlined } from "@material-ui/icons";
 
 const TEST_REGEX = /^[a-z]{1,4}$/i;
 
@@ -31,7 +29,7 @@ class ScreenContainer extends Component {
       fiftyIsChecked: false,
       twoHundredPrice: 0,
       twoHundredIsChecked: false,
-      isValidInput: false,
+      isValidInput: true,
     };
     this.handleTimeframeChange = this.handleTimeframeChange.bind(this);
     this.handleTickerChange = this.handleTickerChange.bind(this);
@@ -40,6 +38,8 @@ class ScreenContainer extends Component {
     this.deleteTicker = this.deleteTicker.bind(this);
     this.clearInput = this.clearInput.bind(this);
     this.handleMaCheck = this.handleMaCheck.bind(this);
+    this.handleInputBlur = this.handleInputBlur.bind(this);
+    this.handleInputFocus = this.handleInputFocus.bind(this);
   }
 
   clearInput() {
@@ -47,19 +47,7 @@ class ScreenContainer extends Component {
     input.value = "";
   }
 
-  // [
-  //   handleMaCheck,
-  //   deleteTicker, OK I THINK
-  //   (a)handleWatchlistClick, OK I THINK
-  //   (a)handleTimeframeChange, OK I THINK
-  //   handleTickerChange, OK I THINK
-  //   addTicker, OK I THINK
-  //   (a)plotData, DELETED THIS
-  // ]
-
   handleMaCheck(e) {
-    // console.log("handleMaCheck CALLED:\n", e);
-    // console.log("MA CLICKED:", e.target.value);
     e.stopPropagation();
     const { fiftyChecked, twoHundredChecked } = this.state;
     let maClicked = e.target.value;
@@ -95,7 +83,6 @@ class ScreenContainer extends Component {
     this.setData(this.state.curTicker, e.target.value);
   }
 
-  // async setData(ticker, timeRange) {
   async setData(ticker, timeframe = this.state.timeframe) {
     // if timeframe if passed as argument to timeRange, timeRange will be used.
     //    Otherwise, current timeframe in state will be used.
@@ -117,7 +104,6 @@ class ScreenContainer extends Component {
       console.log("ERROR IN SET DATA:", `\n${e}`);
       return;
     }
-
     console.log("replacementState:", replacementState);
     this.setState({ ...replacementState });
   }
@@ -125,6 +111,15 @@ class ScreenContainer extends Component {
   handleTickerChange(e) {
     let isValidInput = TEST_REGEX.test(e.target.value);
     this.setState({ isValidInput: isValidInput, tickerInput: e.target.value });
+  }
+
+  handleInputBlur() {
+    this.setState({ isValidInput: true });
+  }
+
+  handleInputFocus(e) {
+    let isValidInput = TEST_REGEX.test(e.target.value);
+    this.setState({ isValidInput: isValidInput });
   }
 
   async addTicker(e) {
@@ -162,6 +157,7 @@ class ScreenContainer extends Component {
       fiftyPrice,
       twoHundredPrice,
       tickerInput,
+      isValidInput,
     } = this.state;
     const { classes } = this.props;
     // console.log('SCREEN CONTAINER DATA:', data)
@@ -187,6 +183,9 @@ class ScreenContainer extends Component {
             dataMin={data ? parseFloat(dataMin.toFixed(2)) : null}
             dataMax={data ? parseFloat(dataMax.toFixed(2)) : null}
             timeframe={timeframe}
+            isValidInput={isValidInput}
+            handleInputBlur={this.handleInputBlur}
+            handleInputFocus={this.handleInputFocus}
           />
         </div>
         {/* <div className={classes.watchlist}>

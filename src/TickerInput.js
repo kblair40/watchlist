@@ -11,6 +11,8 @@ import TextField from "@material-ui/core/TextField";
 import green from "@material-ui/core/colors/green";
 import Icon from "@material-ui/core/Icon";
 
+const TEST_REGEX = /^[a-z]{1,4}$/i;
+
 const styles = (theme) => ({
   root: {
     display: "flex",
@@ -46,10 +48,21 @@ class TickerInput extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tickerInput: "",
-      error: false,
+      isFocused: false,
     };
     this.validator = new SimpleReactValidator();
+    this.getFocus = this.getFocus.bind(this);
+    this.loseFocus = this.loseFocus.bind(this);
+  }
+
+  getFocus(e) {
+    this.setState({ isFocused: true });
+    this.props.handleInputFocus(e);
+  }
+
+  loseFocus() {
+    this.setState({ isFocused: false });
+    this.props.handleInputBlur();
   }
 
   clearInput() {
@@ -57,40 +70,67 @@ class TickerInput extends Component {
     input.value = "";
   }
 
+  getLabel() {
+    if (this.state.isFocused && !this.props.isValidInput) {
+      return "Invalid Input";
+    } else if (!this.state.isFocused) {
+      return " ";
+    }
+    return "Add Ticker";
+  }
+
   render() {
-    const { classes, tickerInput, handleTickerChange, addTicker } = this.props;
+    const {
+      classes,
+      isValidInput,
+      tickerInput,
+      handleTickerChange,
+      addTicker,
+    } = this.props;
     console.log("CURRENT INPUT:", tickerInput);
+    let label = this.getLabel();
     return (
-      <div>
-        <FormControl
-          component="form"
-          // error={error}
-          className={classes.textField}
-        >
-          <div className={classes.inputContainer}>
-            <InputLabel className={classes.inputLabel} htmlFor="tickerInput">
-              Add Ticker
-            </InputLabel>
-            <Input
-              id="newTickerInput"
-              type="text"
-              className={classes.tickerInput}
-              margin="dense"
-              // error={false}
-              onChange={handleTickerChange}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton onClick={addTicker} type="submit">
-                    <Icon className={classes.icon} color="primary">
-                      add_circle
-                    </Icon>
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-          </div>
-        </FormControl>
-      </div>
+      <FormControl component="form" className={classes.textField}>
+        <div className={classes.inputContainer}>
+          {/* <InputLabel className={classes.inputLabel} htmlFor="tickerInput">
+            Add Ticker
+          </InputLabel> */}
+          <TextField
+            id="newTickerInput"
+            type="text"
+            className={classes.tickerInput}
+            margin="dense"
+            label={this.state.isFocused ? " " : "Add Ticker"}
+            helperText={label}
+            onBlur={this.loseFocus}
+            onFocus={this.getFocus}
+            error={!isValidInput}
+            onChange={handleTickerChange}
+            // endAdornment={
+            //   <InputAdornment position="end">
+            //     <IconButton
+            //       disabled={!this.state.isFocused || !isValidInput}
+            //       onClick={addTicker}
+            //       type="submit"
+            //     >
+            //       <Icon className={classes.icon} color="primary">
+            //         add_circle
+            //       </Icon>
+            //     </IconButton>
+            //   </InputAdornment>
+            // }
+          />
+          <IconButton
+            disabled={!this.state.isFocused || !isValidInput}
+            onClick={addTicker}
+            type="submit"
+          >
+            <Icon className={classes.icon} color="primary">
+              add_circle
+            </Icon>
+          </IconButton>
+        </div>
+      </FormControl>
     );
   }
 }
