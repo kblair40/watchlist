@@ -50,25 +50,16 @@ class TickerInput extends Component {
       error: false,
     };
     this.validator = new SimpleReactValidator();
-    this.handleChange = this.handleChange.bind(this);
-    this.validate = this.validate.bind(this);
   }
 
-  handleChange(e) {
-    const { handleTickerChange } = this.props;
-    handleTickerChange(e);
-    this.setState({ tickerInput: e.target.value });
+  clearInput() {
+    let input = document.getElementById("newTickerInput");
+    input.value = "";
   }
-
-  validate() {}
 
   render() {
-    // const { tickerInput } = this.props;
-
     const { classes, tickerInput, handleTickerChange, addTicker } = this.props;
     console.log("CURRENT INPUT:", tickerInput);
-    // const { tickerInput, errorText, userHasTyped, error } = this.state;
-    // console.log("TICKER ERROR?", this.state.error);
     return (
       <div>
         <FormControl
@@ -81,6 +72,7 @@ class TickerInput extends Component {
               Add Ticker
             </InputLabel>
             <Input
+              id="newTickerInput"
               type="text"
               className={classes.tickerInput}
               margin="dense"

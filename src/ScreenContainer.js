@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-
 // import SummaryContainer from "./SummaryContainer";
 import Navbar from "./Navbar";
-import { getData, getMovingAverages, DRAWER_WIDTH } from "./helpers";
+import {
+  getData,
+  getMovingAverages,
+  validateTickerInput,
+  DRAWER_WIDTH,
+} from "./helpers";
 import { ContactsOutlined } from "@material-ui/icons";
 
 const TEST_REGEX = /^[a-z]{1,4}$/i;
@@ -18,29 +22,44 @@ class ScreenContainer extends Component {
     this.state = {
       tickerInput: "",
       timeframe: "5d",
-      data: undefined,
+      data: {},
       dataMin: 0,
       dataMax: 0,
       curTicker: "aapl",
       userTickers: ["aapl", "ibm", "dal", "upwk"],
-      fiftyPrice: null,
+      fiftyPrice: 0,
       fiftyIsChecked: false,
-      twoHundredPrice: null,
+      twoHundredPrice: 0,
       twoHundredIsChecked: false,
       isValidInput: false,
     };
     this.handleTimeframeChange = this.handleTimeframeChange.bind(this);
     this.handleTickerChange = this.handleTickerChange.bind(this);
-    this.plotData = this.plotData.bind(this);
     this.handleWatchlistClick = this.handleWatchlistClick.bind(this);
     this.addTicker = this.addTicker.bind(this);
     this.deleteTicker = this.deleteTicker.bind(this);
+    this.clearInput = this.clearInput.bind(this);
     this.handleMaCheck = this.handleMaCheck.bind(this);
   }
 
+  clearInput() {
+    let input = document.getElementById("newTickerInput");
+    input.value = "";
+  }
+
+  // [
+  //   handleMaCheck,
+  //   deleteTicker, OK I THINK
+  //   (a)handleWatchlistClick, OK I THINK
+  //   (a)handleTimeframeChange, OK I THINK
+  //   handleTickerChange, OK I THINK
+  //   addTicker, OK I THINK
+  //   (a)plotData, DELETED THIS
+  // ]
+
   handleMaCheck(e) {
-    console.log("handleMaCheck CALLED:\n", e);
-    console.log("MA CLICKED:", e.target.value);
+    // console.log("handleMaCheck CALLED:\n", e);
+    // console.log("MA CLICKED:", e.target.value);
     e.stopPropagation();
     const { fiftyChecked, twoHundredChecked } = this.state;
     let maClicked = e.target.value;
@@ -65,47 +84,42 @@ class ScreenContainer extends Component {
     }
   }
 
-  deleteTicker(e, ticker) {
-    console.log("DELETE");
-    console.log("Event:", e);
-    console.log("Ticker:", ticker);
-    e.stopPropagation();
-    this.setState({
-      userTickers: this.state.userTickers.filter((tick) => tick !== ticker),
-    });
-  }
-
   async handleWatchlistClick(e) {
-    // console.log("HANDLE WATCHLIST CLICK");
-    // console.log("ticker:", e.target.innerText);
     const ticker = e.target.innerText;
-    try {
-      let [fifty, twoHundred] = await getMovingAverages(ticker);
-      let [priceData, min, max] = await getData(
-        ticker.toLowerCase(),
-        this.state.timeframe
-      );
-      this.setState({
-        curTicker: ticker,
-        data: priceData,
-        dataMin: Math.min(min, fifty * 0.9),
-        dataMax: Math.max(max, twoHundred * 1.1),
-        fiftyPrice: fifty,
-        twoHundredPrice: twoHundred,
-      });
-    } catch (e) {
-      console.log("ERROR RETRIEVING FROM HANDLE WATCHLIST CLICK");
-      console.log(e);
-    }
+    this.setData(ticker, this.state.timeframe);
   }
 
   async handleTimeframeChange(e) {
-    this.setState({ timeframe: e.target.value });
-    const isValid = await this.plotData(
-      e,
-      this.state.curTicker,
-      e.target.value
-    );
+    // THIS IS SETTING STATE CORRECTLY.  NOT SURE IF IT TRIGGERS RE-RENDER
+    console.log("CHANGE TIMEFRAME TO", e.target.value);
+    this.setData(this.state.curTicker, e.target.value);
+  }
+
+  // async setData(ticker, timeRange) {
+  async setData(ticker, timeframe = this.state.timeframe) {
+    // if timeframe if passed as argument to timeRange, timeRange will be used.
+    //    Otherwise, current timeframe in state will be used.
+    let replacementState = {};
+    try {
+      let [fifty, twoHundred] = await getMovingAverages(ticker);
+      let [prices, min, max] = await getData(ticker.toLowerCase(), timeframe);
+
+      replacementState = {
+        curTicker: ticker,
+        fiftyPrice: fifty,
+        twoHundredPrice: twoHundred,
+        data: prices,
+        dataMin: Math.min(min, fifty * 0.9),
+        dataMax: Math.max(max, twoHundred * 1.1),
+        timeframe: timeframe,
+      };
+    } catch (e) {
+      console.log("ERROR IN SET DATA:", `\n${e}`);
+      return;
+    }
+
+    console.log("replacementState:", replacementState);
+    this.setState({ ...replacementState });
   }
 
   handleTickerChange(e) {
@@ -114,67 +128,25 @@ class ScreenContainer extends Component {
   }
 
   async addTicker(e) {
-    console.log("ADD TICKER CALLED");
-    console.log(e);
+    e.preventDefault();
+    this.clearInput();
     const newTicker = this.state.tickerInput.toLowerCase();
-    const isValid = await this.plotData(e, newTicker);
-    let [fifty, twoHundred] = await getMovingAverages(newTicker);
-    if (!fifty || !twoHundred) {
-      console.log("ERROR! - FAILED TO RETRIEVE MOVING AVERAGES");
-    }
-    // if (this.state.isValid && !this.state.userTickers.includes(newTicker)) {
-    //   console.log("SETTING STATE!");
-    //   this.setState(
-    //     {
-    //       userTickers: [...this.state.userTickers, newTicker],
-    //       curTicker: newTicker,
-    //       fiftyPrice: fifty,
-    //       twoHundredPrice: twoHundred,
-    //     },
-    //     () => {
-    //       this.plotData(e, this.state.curTicker, this.state.timeframe);
-    //     }
-    //   );
-    // }
-    if (isValid && !this.state.userTickers.includes(newTicker)) {
+    const valResult = await validateTickerInput(newTicker);
+    if (!this.state.userTickers.includes(newTicker) && valResult) {
       this.setState({
         userTickers: [...this.state.userTickers, newTicker],
-        // curTicker: this.state.tickerInput,
-        curTicker: newTicker,
-        fiftyPrice: fifty,
-        twoHundredPrice: twoHundred,
       });
+    } else {
+      console.log("FAILURE IN addTicker - ScreenContainer");
+      console.log(`Unable to add ${newTicker}`);
     }
-    this.forceUpdate();
-    return;
   }
 
-  async plotData(e, ticker, timeframe) {
-    e.preventDefault();
-
-    let data;
-    // checks if timeframe was passed as argument.  If it was (if), ticker would've been provided
-    //  as an argument.  If it was not (else), either a new ticker was added or a ticker on the
-    //  watchlist was selected and ticker/timeframe must be retrieved from state.
-    console.log("TIMEFRAME:", timeframe);
-    if (timeframe) {
-      data = await getData(ticker, timeframe);
-    } else {
-      // data = await getData(this.state.tickerInput, this.state.timeframe);
-      data = await getData(ticker, this.state.timeframe);
-    }
-    let priceData, min, max;
-    if (data) {
-      [priceData, min, max] = data;
-    } else {
-      return false;
-    }
+  deleteTicker(e, ticker) {
+    e.stopPropagation();
     this.setState({
-      data: priceData,
-      dataMin: Math.min(min, this.state.fiftyPrice * 0.9),
-      dataMax: Math.max(max, this.state.twoHundredPrice * 1.1),
+      userTickers: this.state.userTickers.filter((tick) => tick !== ticker),
     });
-    return true;
   }
 
   render() {
@@ -278,3 +250,27 @@ export default withStyles(styles)(ScreenContainer);
 //     justifyContent: "center",
 //   },
 // };
+
+// async handleWatchlistClick(e) {
+//   // console.log("HANDLE WATCHLIST CLICK");
+//   // console.log("ticker:", e.target.innerText);
+//   const ticker = e.target.innerText;
+//   try {
+//     let [fifty, twoHundred] = await getMovingAverages(ticker);
+//     let [priceData, min, max] = await getData(
+//       ticker.toLowerCase(),
+//       this.state.timeframe
+//     );
+//     this.setState({
+//       curTicker: ticker,
+//       data: priceData,
+//       dataMin: Math.min(min, fifty * 0.9),
+//       dataMax: Math.max(max, twoHundred * 1.1),
+//       fiftyPrice: fifty,
+//       twoHundredPrice: twoHundred,
+//     });
+//   } catch (e) {
+//     console.log("ERROR RETRIEVING FROM HANDLE WATCHLIST CLICK");
+//     // console.log(e);
+//   }
+// }

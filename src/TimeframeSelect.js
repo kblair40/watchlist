@@ -29,13 +29,22 @@ class TimeframeSelect extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  // async handleChange(e) {
+  //   const { ticker, handleTimeframeChange, plotData } = this.props;
+  //   handleTimeframeChange(e);
+  //   // plotData(e);
+  //   // if (ticker.length) {
+  //   //   plotData(e);
+  //   // }
+  // }
+
   async handleChange(e) {
-    const { ticker, handleTimeframeChange, plotData } = this.props;
+    const { ticker, handleTimeframeChange } = this.props;
     handleTimeframeChange(e);
-    plotData(e);
-    if (ticker.length) {
-      plotData(e);
-    }
+    // plotData(e);
+    // if (ticker.length) {
+    //   plotData(e);
+    // }
   }
 
   render() {

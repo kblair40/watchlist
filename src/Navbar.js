@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import AppBar from "@material-ui/core/AppBar";
-import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
@@ -108,8 +107,9 @@ class Navbar extends Component {
   }
 
   render() {
-    let { data } = { ...this.props };
+    // let { data } = { ...this.props };
     const {
+      data,
       classes,
       theme,
       fiftyIsChecked,
@@ -130,8 +130,7 @@ class Navbar extends Component {
       handleTimeframeChange,
       tickerInput,
     } = this.props;
-    const { height, appBarWidth, drawerOpen, drawerHeight } = this.state;
-    // console.log("STATE:", appBarWidth);
+    const { height, appBarWidth, drawerHeight } = this.state;
     const drawer = (
       <div>
         <div className={classes.toolbar} id="useForDrawerWidth" />
@@ -140,7 +139,6 @@ class Navbar extends Component {
           addTicker={addTicker}
           tickerInput={tickerInput}
         />
-        {/* <Divider /> */}
         <Watchlist
           drawerHeight={drawerHeight}
           handleClick={handleWatchlistClick}

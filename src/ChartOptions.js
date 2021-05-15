@@ -27,7 +27,7 @@ class ChartOptions extends Component {
       ticker,
       appBarWidth,
     } = this.props;
-    console.log("appBarWidth:", appBarWidth);
+    // console.log("appBarWidth:", appBarWidth);
     return (
       <div className={classes.ChartOptions}>
         <div className={classes.maOptions}>

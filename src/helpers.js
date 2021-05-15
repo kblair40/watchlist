@@ -18,6 +18,12 @@ const TIMEMAPPING = {
   "5y": ["year", 5],
 };
 
+export async function validateTickerInput(ticker) {
+  let result = await getData(ticker, "5d");
+  console.log("RESULT:", result ? true : false);
+  return result ? true : false;
+}
+
 export function formatDividend(div) {
   if (div) {
     return (div * 100).toFixed(2) + "%";
@@ -93,9 +99,11 @@ export async function getData(ticker, timeframe) {
   try {
     rawData = await yahooFinance.historical(ticker, options);
   } catch (error) {
+    console.log("ERROR IN GET DATA (helpers.js)");
     rawData = null;
     return rawData;
   }
+  // console.log("RAW DATA:", rawData);
   let min = rawData[0].adjClose;
   let max = rawData[0].adjClose;
   let data = [];
@@ -111,6 +119,7 @@ export async function getData(ticker, timeframe) {
       price: parseFloat(obj.adjClose.toFixed(2)),
     });
   }
+  // console.log("getData returning", data);
   return [data, min * 0.9, max * 1.1];
 }
 
