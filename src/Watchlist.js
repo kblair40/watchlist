@@ -16,25 +16,15 @@ const styles = {
     },
   },
   watchlistContainer: {
-    // padding: '.5rem',
-    // maxHeight: "300px",
     overflowY: "auto",
   },
 };
 class Watchlist extends Component {
   setWatchlistHeight() {
-    // const { drawerHeight } = this.props;
     return this.props.drawerHeight - 300;
   }
   render() {
-    const {
-      classes,
-      handleClick,
-      userTickers,
-      deleteTicker,
-      plotData,
-      drawerHeight,
-    } = this.props;
+    const { classes, handleClick, userTickers, deleteTicker } = this.props;
     return (
       <div style={{ maxHeight: this.setWatchlistHeight }}>
         <List className={classes.watchlistContainer}>

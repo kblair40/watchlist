@@ -1,17 +1,12 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import FormControl from "@material-ui/core/FormControl";
 import IconButton from "@material-ui/core/IconButton";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import SimpleReactValidator from "simple-react-validator";
 import TextField from "@material-ui/core/TextField";
 
 import green from "@material-ui/core/colors/green";
 import Icon from "@material-ui/core/Icon";
-
-const TEST_REGEX = /^[a-z]{1,4}$/i;
 
 const styles = (theme) => ({
   root: {

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
@@ -12,13 +11,10 @@ const styles = (theme) => ({
     flexWrap: "wrap",
   },
   formControl: {
-    // margin: theme.spacing.unit,
-    // marginLeft: ".5rem",
     minWidth: 120,
   },
   timeframeLabel: {
     color: "#222",
-    // marginBottom: "-5px",
   },
 });
 
@@ -29,22 +25,8 @@ class TimeframeSelect extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  // async handleChange(e) {
-  //   const { ticker, handleTimeframeChange, plotData } = this.props;
-  //   handleTimeframeChange(e);
-  //   // plotData(e);
-  //   // if (ticker.length) {
-  //   //   plotData(e);
-  //   // }
-  // }
-
   async handleChange(e) {
-    const { ticker, handleTimeframeChange } = this.props;
-    handleTimeframeChange(e);
-    // plotData(e);
-    // if (ticker.length) {
-    //   plotData(e);
-    // }
+    this.props.handleTimeframeChange(e);
   }
 
   render() {

@@ -26,12 +26,7 @@ class SetTimeframe extends Component {
   }
 
   async handleChange(e) {
-    const { ticker, handleTimeframeChange } = this.props;
-    handleTimeframeChange(e);
-    // plotData(e);
-    // if (ticker.length) {
-    //   plotData(e);
-    // }
+    this.props.handleTimeframeChange(e);
   }
 
   render() {

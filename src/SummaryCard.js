@@ -1,4 +1,4 @@
-import React, { Component, PureComponent } from "react";
+import React, { PureComponent } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -6,7 +6,6 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import yahooFinance from "yahoo-finance2";
-import classNames from "classnames";
 import {
   formatMarketCap,
   formatExchange,
@@ -20,12 +19,8 @@ import {
 const styles = {
   SummaryCard: {
     minWidth: 275,
-    // display: "flex",
-    // flexDirection: "column",
-    // overflowY: "auto",
-    // zIndex: 30,
-    // height: "100%",
-    // minHeight: "150px",
+    width: "100%",
+    maxWidth: 600,
   },
   curInfo: {
     alignItems: "baseline",
@@ -48,7 +43,6 @@ const styles = {
 };
 class SummaryCard extends PureComponent {
   constructor(props) {
-    // console.log("LOGGING PROPS:", props);
     super(props);
     this.state = {
       ticker: null,

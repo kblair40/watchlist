@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
-import Select from "@material-ui/core/Select";
-import { getMovingAverages } from "./helpers";
 import MovingAverageContainer from "./MovingAverageContainer";
 import MovingAverageSelect from "./MovingAverageSelect";
 import SetTimeframe from "./SetTimeframe";

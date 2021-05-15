@@ -1,29 +1,26 @@
 import { withStyles } from "@material-ui/core/styles";
+import CustomTooltip from "./CustomTooltip";
 import React, { Component } from "react";
 import {
   AreaChart,
   Area,
-  LineChart,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
   ReferenceLine,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
 const styles = {
   ChartContainer: {
-    // width: "100%",
+    position: "relative",
+    right: "10px",
   },
 };
 
 class ChartContainer extends Component {
   render() {
-    // let { data } = { ...this.props };
-    // console.log("data:", data);
     const {
       classes,
       data,
@@ -35,12 +32,10 @@ class ChartContainer extends Component {
       twoHundredIsChecked,
       fiftyPrice,
       twoHundredPrice,
-      navHeight,
+      // navHeight,
     } = this.props;
-    let chartHeight = 400 - navHeight;
-    // console.log("CHART PROPS:");
-    // console.log(this.props);
-    // CHECK HERE FOR PRICE DATA.  IF NO PRICE DATA, RENDER ERROR MODAL INSTEAD
+    // let chartHeight = 400 - navHeight;
+    let longTimeframe = ["5d", "10d", "1m"].includes(timeframe);
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer width="99%" height={350} maxHeight={350}>
@@ -48,13 +43,17 @@ class ChartContainer extends Component {
             data={data}
             margin={{
               top: 15,
-              // right: 10,
-              bottom: 10,
-              // left: 10,
+              bottom: 15,
             }}
           >
-            <XAxis dataKey="date" />
-            <YAxis domain={[dataMin, dataMax]} />
+            <XAxis
+              angle={5}
+              interval="preserveEnd"
+              minTickGap={15}
+              dataKey={longTimeframe ? "longDate" : "shortDate"}
+              tickMargin={10}
+            />
+            <YAxis dataKey="price" domain={[dataMin, dataMax]} />
             {fiftyIsChecked ? (
               <ReferenceLine
                 y={fiftyPrice}
@@ -92,7 +91,10 @@ class ChartContainer extends Component {
               activeDot={{ strokeWidth: 0.5, stroke: "blue" }}
               fillOpacity={0.3}
             />
-            <Tooltip />
+            <Tooltip
+              content={<CustomTooltip />}
+              // wrapperStyle={{ backgroundColor: "#fff" }}
+            />
             <CartesianGrid strokeDasharray="3 3" />
             {/* <Legend /> 
             Replace with card that will display ticker symbol

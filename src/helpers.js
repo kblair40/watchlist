@@ -115,7 +115,8 @@ export async function getData(ticker, timeframe) {
       max = obj.adjClose;
     }
     data.push({
-      date: `${months[obj.date.getMonth()]}-${obj.date.getDate()}`,
+      shortDate: dayjs(obj.date).format("MMM 'YY"),
+      longDate: dayjs(obj.date).format("MMM D, 'YY"),
       price: parseFloat(obj.adjClose.toFixed(2)),
     });
   }

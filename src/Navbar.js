@@ -3,18 +3,14 @@ import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
 import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core/styles";
 import Watchlist from "./Watchlist";
 import TickerInput from "./TickerInput";
 import ChartContainer from "./ChartContainer";
 import ChartOptions from "./ChartOptions";
 import SummaryCard from "./SummaryCard";
-import classNames from "classnames";
 
 const drawerWidth = 240;
 
@@ -52,7 +48,7 @@ const styles = (theme) => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit}px`,
   },
   customToolbar: {
     display: "flex",
@@ -60,6 +56,10 @@ const styles = (theme) => ({
   },
   drawerContainer: {
     // height: "100%",
+  },
+  summary: {
+    display: "flex",
+    justifyContent: "center",
   },
 });
 
@@ -185,7 +185,7 @@ class Navbar extends Component {
               />
             </div>
 
-            <Button color="inherit">Login</Button>
+            {/* <Button color="inherit">Login</Button> */}
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>

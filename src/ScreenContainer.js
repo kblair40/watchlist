@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Navbar from "./Navbar";
-import {
-  getData,
-  getMovingAverages,
-  validateTickerInput,
-  DRAWER_WIDTH,
-} from "./helpers";
+import { getData, getMovingAverages, validateTickerInput } from "./helpers";
 
 const TEST_REGEX = /^[a-z]{1,4}$/i;
 
 const styles = {
-  ScreenContainer: {},
+  ScreenContainer: {
+    // backgroundColor: "#253138",
+    // color: "#fff",
+  },
 };
 
 class ScreenContainer extends Component {
@@ -49,7 +47,6 @@ class ScreenContainer extends Component {
 
   handleMaCheck(e) {
     e.stopPropagation();
-    const { fiftyChecked, twoHundredChecked } = this.state;
     let maClicked = e.target.value;
 
     if (Array.isArray(maClicked)) {
@@ -160,7 +157,6 @@ class ScreenContainer extends Component {
       isValidInput,
     } = this.state;
     const { classes } = this.props;
-    // console.log('SCREEN CONTAINER DATA:', data)
     return (
       <div className={classes.ScreenContainer}>
         <div className={classes.navbar}>
@@ -188,88 +184,9 @@ class ScreenContainer extends Component {
             handleInputFocus={this.handleInputFocus}
           />
         </div>
-        {/* <div className={classes.watchlist}>
-          <Watchlist />
-        </div>
-        <div className={classes.summaryAndOptions}>
-           <div className={classes.chartOptions}>
-            <h3 className={classes.chartOptionsLabel}>Chart Options</h3>
-            <SetTimeframe
-              plotData={this.plotData}
-              handleTimeframeChange={this.handleTimeframeChange}
-              ticker={curTicker}
-            />
-            <MovingAverageContainer
-              ticker={curTicker}
-              handleCheck={this.handleMaCheck}
-              fiftyIsChecked={fiftyIsChecked}
-              twoHundredIsChecked={twoHundredIsChecked}
-            />
-          </div> */}
-        {/* <div className={classes.chartOptions}>
-          <h3 className={classes.chartOptionsLabel}>Chart Options</h3>
-          <SetTimeframe
-            plotData={this.plotData}
-            handleTimeframeChange={this.handleTimeframeChange}
-            ticker={curTicker}
-          />
-          <MovingAverageContainer
-            ticker={curTicker}
-            handleCheck={this.handleMaCheck}
-            fiftyIsChecked={fiftyIsChecked}
-            twoHundredIsChecked={twoHundredIsChecked}
-          />
-        </div> */}
       </div>
-      // </div>
     );
   }
 }
 
 export default withStyles(styles)(ScreenContainer);
-
-// const styles = {
-//   ScreenContainer: {
-//     height: "100vh",
-//     padding: "1rem",
-//   },
-//   watchlistAndChart: {
-//     display: "grid",
-//     gridTemplateColumns: "20% 80%",
-//     // "@media screen and (max-width: 750px)": {
-//     //   gridTemplateColumns: "100%",
-//     //   gridTemplateRows: "13% 87%",
-//     // },
-//   },
-//   divider: {
-//     margin: ".5rem 0",
-//   },
-//   movingAverage: {
-//     display: "flex",
-//     justifyContent: "center",
-//   },
-// };
-
-// async handleWatchlistClick(e) {
-//   // console.log("HANDLE WATCHLIST CLICK");
-//   // console.log("ticker:", e.target.innerText);
-//   const ticker = e.target.innerText;
-//   try {
-//     let [fifty, twoHundred] = await getMovingAverages(ticker);
-//     let [priceData, min, max] = await getData(
-//       ticker.toLowerCase(),
-//       this.state.timeframe
-//     );
-//     this.setState({
-//       curTicker: ticker,
-//       data: priceData,
-//       dataMin: Math.min(min, fifty * 0.9),
-//       dataMax: Math.max(max, twoHundred * 1.1),
-//       fiftyPrice: fifty,
-//       twoHundredPrice: twoHundred,
-//     });
-//   } catch (e) {
-//     console.log("ERROR RETRIEVING FROM HANDLE WATCHLIST CLICK");
-//     // console.log(e);
-//   }
-// }

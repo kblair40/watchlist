@@ -52,11 +52,7 @@ class MovingAverageSelect extends Component {
   }
 
   render() {
-    const { classes, handleMaCheck, fiftyIsChecked, twoHundredIsChecked } =
-      this.props;
-    let selectValue = this.getSelectValue();
-    // console.log("PROPS RECEIVED:", this.props);
-    // console.log("selectValue:", selectValue);
+    const { classes, fiftyIsChecked, twoHundredIsChecked } = this.props;
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl>
