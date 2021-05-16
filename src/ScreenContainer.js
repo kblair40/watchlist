@@ -29,6 +29,7 @@ class ScreenContainer extends Component {
       twoHundredIsChecked: false,
       isValidInput: true,
       openSnackbar: false,
+      addTickerSuccess: false,
     };
     this.handleTimeframeChange = this.handleTimeframeChange.bind(this);
     this.handleTickerChange = this.handleTickerChange.bind(this);
@@ -120,24 +121,33 @@ class ScreenContainer extends Component {
     this.setState({ isValidInput: isValidInput });
   }
 
+  openSnackbar(ticker, success) {
+    let newTickers = success
+      ? [...this.state.userTickers, ticker]
+      : [...this.state.userTickers];
+    this.setState({
+      userTickers: newTickers,
+      openSnackbar: true,
+      addTickerSuccess: success,
+    });
+    setTimeout(() => {
+      this.setState({ openSnackbar: false });
+    }, 3000);
+  }
+
   async addTicker(e) {
     e.preventDefault();
     this.clearInput();
     const newTicker = this.state.tickerInput.toLowerCase();
     const valResult = await validateTickerInput(newTicker);
     if (!this.state.userTickers.includes(newTicker) && valResult) {
+      this.openSnackbar(newTicker, true);
       // PUT THIS IN SETTIMEOUT?
       // MIGHT NEED TO SET openSnackbar BACK TO FALSE
-      this.setState({
-        userTickers: [...this.state.userTickers, newTicker],
-        openSnackbar: true,
-      });
-      setTimeout(() => {
-        this.setState({ openSnackbar: false });
-      }, 3000);
     } else {
       console.log("FAILURE IN addTicker - ScreenContainer");
       console.log(`Unable to add ${newTicker}`);
+      this.openSnackbar(newTicker, false);
       // RENDER SNACKBAR WITH ERROR HERE
     }
   }
@@ -164,6 +174,7 @@ class ScreenContainer extends Component {
       tickerInput,
       isValidInput,
       openSnackbar,
+      addTickerSuccess,
     } = this.state;
     // let mostRecentTickerAdded = userTickers[userTickers.length - 1];
     // console.log("MOST RECENT: ", mostRecentTickerAdded);
@@ -194,6 +205,7 @@ class ScreenContainer extends Component {
             isValidInput={isValidInput}
             handleInputBlur={this.handleInputBlur}
             handleInputFocus={this.handleInputFocus}
+            addTickerSuccess={addTickerSuccess}
             // mostRecentTickerAdded={mostRecentTickerAdded}
           />
         </div>

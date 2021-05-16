@@ -25,8 +25,14 @@ class Watchlist extends Component {
     return this.props.drawerHeight - 300;
   }
   render() {
-    const { classes, openSnackbar, handleClick, userTickers, deleteTicker } =
-      this.props;
+    const {
+      classes,
+      addTickerSuccess,
+      openSnackbar,
+      handleClick,
+      userTickers,
+      deleteTicker,
+    } = this.props;
     return (
       <div style={{ maxHeight: this.setWatchlistHeight }}>
         <List className={classes.watchlistContainer}>
@@ -42,7 +48,11 @@ class Watchlist extends Component {
             </ListItem>
           ))}
         </List>
-        <CustomSnackbar openSnackbar={openSnackbar} userTickers={userTickers} />
+        <CustomSnackbar
+          addTickerSuccess={addTickerSuccess}
+          openSnackbar={openSnackbar}
+          userTickers={userTickers}
+        />
       </div>
     );
   }
