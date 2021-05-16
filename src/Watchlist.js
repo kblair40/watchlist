@@ -6,6 +6,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined";
 import red from "@material-ui/core/colors/red";
+import CustomSnackbar from "./CustomSnackbar";
 
 const styles = {
   trash: {
@@ -24,7 +25,8 @@ class Watchlist extends Component {
     return this.props.drawerHeight - 300;
   }
   render() {
-    const { classes, handleClick, userTickers, deleteTicker } = this.props;
+    const { classes, openSnackbar, handleClick, userTickers, deleteTicker } =
+      this.props;
     return (
       <div style={{ maxHeight: this.setWatchlistHeight }}>
         <List className={classes.watchlistContainer}>
@@ -40,6 +42,7 @@ class Watchlist extends Component {
             </ListItem>
           ))}
         </List>
+        <CustomSnackbar openSnackbar={openSnackbar} userTickers={userTickers} />
       </div>
     );
   }

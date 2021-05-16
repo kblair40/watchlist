@@ -35,9 +35,6 @@ const styles = (theme) => ({
     marginLeft: "5%",
   },
 });
-// handleTickerChange={handleTickerChange}
-// addTicker={addTicker}
-// const TEST_REGEX = /^[a-z]{1,4}$/i;
 
 class TickerInput extends Component {
   constructor(props) {
@@ -82,14 +79,10 @@ class TickerInput extends Component {
       handleTickerChange,
       addTicker,
     } = this.props;
-    console.log("CURRENT INPUT:", tickerInput);
     let label = this.getLabel();
     return (
       <FormControl component="form" className={classes.textField}>
         <div className={classes.inputContainer}>
-          {/* <InputLabel className={classes.inputLabel} htmlFor="tickerInput">
-            Add Ticker
-          </InputLabel> */}
           <TextField
             id="newTickerInput"
             type="text"
@@ -101,19 +94,6 @@ class TickerInput extends Component {
             onFocus={this.getFocus}
             error={!isValidInput}
             onChange={handleTickerChange}
-            // endAdornment={
-            //   <InputAdornment position="end">
-            //     <IconButton
-            //       disabled={!this.state.isFocused || !isValidInput}
-            //       onClick={addTicker}
-            //       type="submit"
-            //     >
-            //       <Icon className={classes.icon} color="primary">
-            //         add_circle
-            //       </Icon>
-            //     </IconButton>
-            //   </InputAdornment>
-            // }
           />
           <IconButton
             disabled={!this.state.isFocused || !isValidInput}

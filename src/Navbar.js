@@ -71,6 +71,7 @@ class Navbar extends Component {
       height: 0,
       appBarWidth: 0,
       drawerHeight: 0,
+      snackBarIsOpen: false,
     };
     this.handleDrawerToggle = this.handleDrawerToggle.bind(this);
     this.calcDimensions = this.calcDimensions.bind(this);
@@ -89,11 +90,6 @@ class Navbar extends Component {
       navHeight !== this.state.height ||
       appBarWidth !== this.state.appBarWidth
     ) {
-      // console.log(
-      //   "SETTING STATE:",
-      //   `\nnavHeight: ${navHeight}`,
-      //   `\nappBarWidth: ${appBarWidth}`
-      // );
       this.setState({
         height: navHeight,
         appBarWidth: appBarWidth,
@@ -132,6 +128,8 @@ class Navbar extends Component {
       isValidInput,
       handleInputBlur,
       handleInputFocus,
+      openSnackbar,
+      // mostRecentTickerAdded,
     } = this.props;
     const { height, appBarWidth, drawerHeight } = this.state;
     const drawer = (
@@ -151,6 +149,7 @@ class Navbar extends Component {
           userTickers={userTickers}
           deleteTicker={deleteTicker}
           plotData={plotData}
+          openSnackbar={openSnackbar}
         />
       </div>
     );

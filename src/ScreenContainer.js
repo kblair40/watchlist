@@ -28,6 +28,7 @@ class ScreenContainer extends Component {
       twoHundredPrice: 0,
       twoHundredIsChecked: false,
       isValidInput: true,
+      openSnackbar: false,
     };
     this.handleTimeframeChange = this.handleTimeframeChange.bind(this);
     this.handleTickerChange = this.handleTickerChange.bind(this);
@@ -125,12 +126,19 @@ class ScreenContainer extends Component {
     const newTicker = this.state.tickerInput.toLowerCase();
     const valResult = await validateTickerInput(newTicker);
     if (!this.state.userTickers.includes(newTicker) && valResult) {
+      // PUT THIS IN SETTIMEOUT?
+      // MIGHT NEED TO SET openSnackbar BACK TO FALSE
       this.setState({
         userTickers: [...this.state.userTickers, newTicker],
+        openSnackbar: true,
       });
+      setTimeout(() => {
+        this.setState({ openSnackbar: false });
+      }, 3000);
     } else {
       console.log("FAILURE IN addTicker - ScreenContainer");
       console.log(`Unable to add ${newTicker}`);
+      // RENDER SNACKBAR WITH ERROR HERE
     }
   }
 
@@ -155,13 +163,17 @@ class ScreenContainer extends Component {
       twoHundredPrice,
       tickerInput,
       isValidInput,
+      openSnackbar,
     } = this.state;
+    // let mostRecentTickerAdded = userTickers[userTickers.length - 1];
+    // console.log("MOST RECENT: ", mostRecentTickerAdded);
     const { classes } = this.props;
     return (
       <div className={classes.ScreenContainer}>
         <div className={classes.navbar}>
           <Navbar
             data={data}
+            openSnackbar={openSnackbar}
             tickerInput={tickerInput}
             handleTimeframeChange={this.handleTimeframeChange}
             handleMaCheck={this.handleMaCheck}
@@ -182,6 +194,7 @@ class ScreenContainer extends Component {
             isValidInput={isValidInput}
             handleInputBlur={this.handleInputBlur}
             handleInputFocus={this.handleInputFocus}
+            // mostRecentTickerAdded={mostRecentTickerAdded}
           />
         </div>
       </div>
