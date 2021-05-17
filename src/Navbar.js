@@ -12,7 +12,7 @@ import ChartContainer from "./ChartContainer";
 import ChartOptions from "./ChartOptions";
 import SummaryCard from "./SummaryCard";
 
-const drawerWidth = 240;
+const drawerWidth = 230;
 
 const styles = (theme) => ({
   root: {
@@ -131,7 +131,6 @@ class Navbar extends Component {
       openSnackbar,
       addTickerSuccess,
       errorTicker,
-      // mostRecentTickerAdded,
     } = this.props;
     const { height, appBarWidth, drawerHeight } = this.state;
     const drawer = (

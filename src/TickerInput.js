@@ -2,17 +2,13 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import IconButton from "@material-ui/core/IconButton";
-import SimpleReactValidator from "simple-react-validator";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import green from "@material-ui/core/colors/green";
 import Icon from "@material-ui/core/Icon";
 
 const styles = (theme) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
   textField: {
     flexBasis: 200,
   },
@@ -24,15 +20,11 @@ const styles = (theme) => ({
     },
   },
   tickerInput: {
-    // width: "90%",
-    // marginBottom: "2px",
+    marginBottom: 0,
   },
   inputContainer: {
     display: "flex",
-    justifyContent: "center",
-  },
-  inputLabel: {
-    marginLeft: "5%",
+    alignItems: "center",
   },
 });
 
@@ -41,10 +33,10 @@ class TickerInput extends Component {
     super(props);
     this.state = {
       isFocused: false,
+      valid: false,
     };
-    this.validator = new SimpleReactValidator();
     this.getFocus = this.getFocus.bind(this);
-    this.loseFocus = this.loseFocus.bind(this);
+    // this.loseFocus = this.loseFocus.bind(this);
   }
 
   getFocus(e) {
@@ -52,10 +44,10 @@ class TickerInput extends Component {
     this.props.handleInputFocus(e);
   }
 
-  loseFocus() {
-    this.setState({ isFocused: false });
-    this.props.handleInputBlur();
-  }
+  // loseFocus() {
+  //   this.setState({ isFocused: false });
+  //   this.props.handleInputBlur();
+  // }
 
   clearInput() {
     let input = document.getElementById("newTickerInput");
@@ -72,38 +64,37 @@ class TickerInput extends Component {
   }
 
   render() {
-    const {
-      classes,
-      isValidInput,
-      tickerInput,
-      handleTickerChange,
-      addTicker,
-    } = this.props;
+    const { classes, isValidInput, handleTickerChange, addTicker } = this.props;
     let label = this.getLabel();
     return (
       <FormControl component="form" className={classes.textField}>
         <div className={classes.inputContainer}>
-          <TextField
-            id="newTickerInput"
-            type="text"
-            className={classes.tickerInput}
-            margin="dense"
-            label={this.state.isFocused ? " " : "Add Ticker"}
-            helperText={label}
-            onBlur={this.loseFocus}
-            onFocus={this.getFocus}
-            error={!isValidInput}
-            onChange={handleTickerChange}
-          />
-          <IconButton
-            disabled={!this.state.isFocused || !isValidInput}
-            onClick={addTicker}
-            type="submit"
-          >
-            <Icon className={classes.icon} color="primary">
-              add_circle
-            </Icon>
-          </IconButton>
+          <div className={classes.tickerInput}>
+            <TextField
+              id="newTickerInput"
+              type="text"
+              className={classes.tickerInput}
+              margin="dense"
+              label={this.state.isFocused ? " " : "Add Ticker"}
+              helperText={label}
+              // onBlur={this.loseFocus}
+              onFocus={this.getFocus}
+              error={!isValidInput}
+              onChange={handleTickerChange}
+            />
+          </div>
+          <div className={classes.tickerInputBtn}>
+            <IconButton
+              // disabled={!this.state.isFocused || !isValidInput}
+              disabled={!isValidInput}
+              onClick={addTicker}
+              type="submit"
+            >
+              <Icon className={classes.icon} color="primary">
+                add_circle
+              </Icon>
+            </IconButton>
+          </div>
         </div>
       </FormControl>
     );

@@ -216,7 +216,6 @@ class ScreenContainer extends Component {
             handleInputFocus={this.handleInputFocus}
             addTickerSuccess={addTickerSuccess}
             errorTicker={errorTicker}
-            // mostRecentTickerAdded={mostRecentTickerAdded}
           />
         </div>
       </div>

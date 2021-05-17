@@ -36,6 +36,7 @@ class ChartContainer extends Component {
     } = this.props;
     // let chartHeight = 400 - navHeight;
     let longTimeframe = ["5d", "10d", "1m"].includes(timeframe);
+    let leftMargin = dataMax >= 1000 ? 15 : dataMax >= 100 ? 5 : 0;
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer width="99%" height={350} maxHeight={350}>
@@ -44,6 +45,7 @@ class ChartContainer extends Component {
             margin={{
               top: 15,
               bottom: 15,
+              left: leftMargin,
             }}
           >
             <XAxis
@@ -91,14 +93,8 @@ class ChartContainer extends Component {
               activeDot={{ strokeWidth: 0.5, stroke: "blue" }}
               fillOpacity={0.3}
             />
-            <Tooltip
-              content={<CustomTooltip />}
-              // wrapperStyle={{ backgroundColor: "#fff" }}
-            />
+            <Tooltip content={<CustomTooltip />} />
             <CartesianGrid strokeDasharray="3 3" />
-            {/* <Legend /> 
-            Replace with card that will display ticker symbol
-            */}
           </AreaChart>
         </ResponsiveContainer>
       </div>
