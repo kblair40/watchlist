@@ -7,7 +7,7 @@ const TEST_REGEX = /^[a-z]{1,4}$/i;
 
 const styles = {
   ScreenContainer: {
-    // backgroundColor: "#253138",
+    // backgroundColor: "#24303a",
     // color: "#fff",
   },
 };

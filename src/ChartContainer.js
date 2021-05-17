@@ -1,12 +1,15 @@
 import { withStyles } from "@material-ui/core/styles";
 import CustomTooltip from "./CustomTooltip";
 import React, { Component } from "react";
+import ArrowUpward from "@material-ui/icons/ArrowUpward";
+import ArrowDownward from "@material-ui/icons/ArrowDownward";
+import { NUM_OF_DAYS } from "./helpers";
 import {
   AreaChart,
   Area,
   XAxis,
   YAxis,
-  CartesianGrid,
+  // Legend,
   ReferenceLine,
   Tooltip,
   ResponsiveContainer,
@@ -19,7 +22,51 @@ const styles = {
   },
 };
 
+const renderLegend = (props) => {
+  let legendContainer = {
+    border: "1px solid red",
+    display: "flex",
+    justifyContent: "flex-end",
+  };
+
+  return (
+    <div style={legendContainer}>
+      <div>
+        <span>Trending</span>
+        <span>
+          {props.posReturn ? (
+            <ArrowUpward style={{ color: "#48c15e" }} />
+          ) : (
+            <ArrowDownward style={{ color: "#ef6670" }} />
+          )}
+        </span>
+      </div>
+      <div>
+        <span>Annualized RoR&nbsp; </span>
+        {props.posReturn ? (
+          <span style={{ color: "#48c15e" }}> {props.ror}%</span>
+        ) : (
+          <span style={{ color: "#ef6670" }}> {props.ror}%</span>
+        )}
+      </div>
+    </div>
+  );
+};
+
 class ChartContainer extends Component {
+  isGain(data) {
+    if (data[0]) {
+      let startPrice = data[0].price;
+      let endPrice = data[data.length - 1].price;
+      console.log("isGain ?", endPrice > startPrice);
+      console.log("ROR:", ((endPrice - startPrice) / startPrice).toFixed(2));
+      let rorAdj = NUM_OF_DAYS[this.props.timeframe] / 365;
+      let ror = ((endPrice - startPrice) / startPrice) * 100;
+      ror = (ror * rorAdj).toFixed(2);
+      return [endPrice > startPrice, ror];
+    }
+    return [false, null];
+  }
   render() {
     const {
       classes,
@@ -32,11 +79,13 @@ class ChartContainer extends Component {
       twoHundredIsChecked,
       fiftyPrice,
       twoHundredPrice,
-      // navHeight,
+      height,
     } = this.props;
-    // let chartHeight = 400 - navHeight;
-    let longTimeframe = ["5d", "10d", "1m"].includes(timeframe);
+    console.log("HEIGHT:", height);
+    // let chartHeight = 400 - height;
+    let longTimeframe = ["5d", "10d", "1m", "6m"].includes(timeframe);
     let leftMargin = dataMax >= 1000 ? 15 : dataMax >= 100 ? 5 : 0;
+    let [posReturn, ror] = this.isGain(data);
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer width="99%" height={350} maxHeight={350}>
@@ -47,20 +96,44 @@ class ChartContainer extends Component {
               bottom: 15,
               left: leftMargin,
             }}
+            posReturn={posReturn}
           >
+            <defs>
+              <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor={posReturn ? "#48c15e" : "#ef6670"}
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor={posReturn ? "#48c15e" : "#ef6670"}
+                  stopOpacity={0}
+                />
+              </linearGradient>
+            </defs>
             <XAxis
-              angle={5}
+              axisLine={{ stroke: "rgba(0,0,0,.4)" }}
+              tickLine={{ stroke: "rgba(0,0,0,.3)" }}
+              // allowDuplicatedCategory={false}
               interval="preserveEnd"
-              minTickGap={15}
+              minTickGap={25}
               dataKey={longTimeframe ? "longDate" : "shortDate"}
               tickMargin={10}
             />
-            <YAxis dataKey="price" domain={[dataMin, dataMax]} />
+            <YAxis
+              axisLine={{ stroke: "rgba(0,0,0,.4)" }}
+              tickLine={{ stroke: "rgba(0,0,0,.3)" }}
+              dataKey="price"
+              domain={[dataMin, dataMax]}
+            />
             {fiftyIsChecked ? (
               <ReferenceLine
                 y={fiftyPrice}
                 name="50-Day Moving Average"
-                stroke="red"
+                stroke="rgba(0,0,0,.4)"
+                label={{ position: "top", value: "50" }}
+                strokeDasharray=" 3"
               />
             ) : (
               ""
@@ -69,32 +142,24 @@ class ChartContainer extends Component {
               <ReferenceLine
                 y={twoHundredPrice}
                 name="200-Day Moving Average"
-                stroke="green"
+                stroke="rgba(0,0,0,.4)"
+                label={{ position: "top", value: "200" }}
+                strokeDasharray=" 3"
               />
             ) : (
               ""
             )}
-            {/* Recharts does not support adding ReferenceLine to legend.  The 2 lines below do not
-              appear in the chart, but they do appear in legend */}
-            {fiftyIsChecked ? (
-              <Area name="50-day moving avg" stroke="red" />
-            ) : (
-              ""
-            )}
-            {twoHundredIsChecked ? (
-              <Area name="200-day moving avg" stroke="green" />
-            ) : (
-              ""
-            )}
+
             <Area
               dataKey="price"
               name={ticker.toUpperCase()}
               dot={false}
-              activeDot={{ strokeWidth: 0.5, stroke: "blue" }}
-              fillOpacity={0.3}
+              stroke={posReturn ? "#48c15e" : "#ef6670"}
+              activeDot={{ strokeWidth: 0.5 }}
+              fillOpacity={1}
+              fill="url(#colorUv)"
             />
             <Tooltip content={<CustomTooltip />} />
-            <CartesianGrid strokeDasharray="3 3" />
           </AreaChart>
         </ResponsiveContainer>
       </div>

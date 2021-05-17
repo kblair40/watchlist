@@ -7,8 +7,12 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 
 const styles = {
-  maLabel: {
-    color: "#222",
+  root: {
+    color: "#1e2730",
+    fontWeight: "500",
+    "&.Mui-focused": {
+      color: "#1e2730",
+    },
   },
 };
 
@@ -25,9 +29,9 @@ class MovingAverageContainer extends Component {
     const { classes, handleMaCheck, fiftyIsChecked, twoHundredIsChecked } =
       this.props;
     return (
-      <div className={classes.MovingAverageContainer}>
-        <FormControl className={classes.labelAndOptions} component="fieldset">
-          <FormLabel className={classes.maLabel} component="legend">
+      <div>
+        <FormControl component="fieldset">
+          <FormLabel className={classes.root} component="legend">
             Moving Average
           </FormLabel>
           <FormGroup row={true}>
@@ -37,6 +41,7 @@ class MovingAverageContainer extends Component {
                   onClick={handleMaCheck}
                   value="50"
                   checked={fiftyIsChecked}
+                  color="default"
                 />
               }
               label="50-day"
@@ -47,6 +52,7 @@ class MovingAverageContainer extends Component {
                   onClick={handleMaCheck}
                   value="200"
                   checked={twoHundredIsChecked}
+                  color="default"
                 />
               }
               label="200-day"

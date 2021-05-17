@@ -25,20 +25,27 @@ const styles = {
   curInfo: {
     alignItems: "baseline",
     display: "flex",
+    fontWeight: 500,
   },
   info: {
     display: "flex",
     justifyContent: "space-between",
   },
   neg: {
-    color: NEGATIVE,
+    color: "#ef6670",
   },
   pos: {
-    color: POSITIVE,
+    color: "#48c15e",
   },
   curPrice: {
-    fontWeight: "700",
+    fontWeight: 700,
     fontSize: "1.8rem",
+  },
+  category: {
+    fontWeight: 400,
+  },
+  company: {
+    fontWeight: 500,
   },
 };
 class SummaryCard extends PureComponent {
@@ -125,7 +132,9 @@ class SummaryCard extends PureComponent {
     return (
       <Card className={classes.SummaryCard}>
         <CardContent>
-          <Typography variant="h5">{shortName}</Typography>
+          <Typography className={classes.company} variant="h5">
+            {shortName}
+          </Typography>
           <Typography component="p" gutterBottom>
             {`${exchangeName}:${ticker.toUpperCase()} - ${now}`}
           </Typography>
@@ -163,25 +172,31 @@ class SummaryCard extends PureComponent {
           </Typography>
           <div className={classes.infoContainer}>
             <Typography className={classes.info} component="div">
-              <span>Open</span> <span>{regularMarketOpen}</span>
+              <span className={classes.category}>Open</span>{" "}
+              <span>{regularMarketOpen}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>Prev Close</span> <span>{regularMarketPreviousClose}</span>
+              <span className={classes.category}>Prev Close</span>{" "}
+              <span>{regularMarketPreviousClose}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>High</span> <span>{regularMarketDayHigh}</span>
+              <span className={classes.category}>High</span>{" "}
+              <span>{regularMarketDayHigh}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>Low</span> <span>{regularMarketDayLow}</span>
+              <span className={classes.category}>Low</span>{" "}
+              <span>{regularMarketDayLow}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>Market Cap</span> <span>{cap}</span>
+              <span className={classes.category}>Market Cap</span>{" "}
+              <span>{cap}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>P/E ratio</span> <span>{pe ? pe : "n/a"}</span>
+              <span className={classes.category}>P/E ratio</span>{" "}
+              <span>{pe ? pe : "n/a"}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span>Dividend yield </span>
+              <span className={classes.category}>Dividend yield </span>
               <span>{div ? div : "n/a"}</span>
             </Typography>
           </div>

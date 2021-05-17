@@ -4,17 +4,25 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
+import Input from "@material-ui/core/Input";
 
 const styles = (theme) => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap",
+    color: "#1e2730",
+    fontWeight: "500",
+    "&.Mui-focused": {
+      color: "#1e2730",
+    },
+  },
+  underline: {
+    borderBottom: "1px solid #4a667a",
+    "&:after": {
+      // The MUI source seems to use this but it doesn't work
+      borderBottom: "1px solid #4a667a",
+    },
   },
   formControl: {
     minWidth: 120,
-  },
-  timeframeLabel: {
-    color: "#222",
   },
 });
 
@@ -34,13 +42,19 @@ class TimeframeSelect extends Component {
     return (
       <form className={classes.root} autoComplete="off">
         <FormControl className={classes.formControl}>
-          <FormLabel className={classes.timeframeLabel} component="legend">
+          <FormLabel className={classes.root} component="legend">
             Timeframe
           </FormLabel>
           <Select
             id="timeframeOptions"
             value={timeframe}
             onChange={this.handleChange}
+            input={
+              <Input
+                classes={{ underline: classes.underline }}
+                id="maOptions"
+              />
+            }
           >
             <MenuItem value="5d">5 Days</MenuItem>
             <MenuItem value="10d">10 Days</MenuItem>

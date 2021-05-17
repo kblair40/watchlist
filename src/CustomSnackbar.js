@@ -10,7 +10,10 @@ const styles = (theme) => ({
     padding: theme.spacing.unit / 2,
   },
   error: {
-    backgroundColor: red[700],
+    backgroundColor: "#ef6670",
+  },
+  success: {
+    backgroundColor: "#48c15e",
   },
 });
 
@@ -27,6 +30,9 @@ class CustomSnackbar extends Component {
       userTickers[userTickers.length - 1].toUpperCase();
     console.log("SNACKBAR MOST RECENT: ", mostRecentTickerAdded);
     console.log("SUCCESS ?", addTickerSuccess);
+    console.log("ERROR TICKER:", errorTicker);
+    let tickerIsDuplicate = userTickers.includes(errorTicker);
+    console.log("DUPLICATE ?", tickerIsDuplicate);
     return (
       <Snackbar
         anchorOrigin={{
@@ -41,7 +47,7 @@ class CustomSnackbar extends Component {
         }}
       >
         <SnackbarContent
-          className={addTickerSuccess ? "" : classes.error}
+          className={addTickerSuccess ? classes.success : classes.error}
           message={
             addTickerSuccess ? (
               <span id="message-id">
@@ -49,7 +55,11 @@ class CustomSnackbar extends Component {
               </span>
             ) : (
               <span id="message-id">
-                Failed to add {errorTicker.toUpperCase()} to your watchlist
+                Failed to add {errorTicker.toUpperCase()} to your watchlist.
+                &nbsp;
+                {tickerIsDuplicate
+                  ? "Ticker is already in your watchlist."
+                  : "Ticker is invalid."}
               </span>
             )
           }

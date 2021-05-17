@@ -5,15 +5,14 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined";
-import red from "@material-ui/core/colors/red";
 import CustomSnackbar from "./CustomSnackbar";
 
 const styles = {
   trash: {
-    color: red[600],
+    color: "#ef6670",
     fontSize: "1.8rem",
     "&:hover": {
-      color: red[800],
+      color: "#ef6670",
     },
   },
   watchlistContainer: {
@@ -45,7 +44,10 @@ class Watchlist extends Component {
                   className={classes.trash}
                 />
               </ListItemIcon>
-              <ListItemText primary={ticker.toUpperCase()} />
+              <ListItemText
+                disableTypography={true}
+                primary={ticker.toUpperCase()}
+              />
             </ListItem>
           ))}
         </List>

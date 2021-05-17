@@ -7,15 +7,12 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 
 const styles = {
-  timeframes: {
-    whiteSpace: "nowrap",
-  },
-  timeframeLabel: {
-    color: "#222",
-  },
-  radioGroup: {
-    display: "flex",
-    flexWrap: "nowrap",
+  root: {
+    color: "#1e2730",
+    fontWeight: "500",
+    "&.Mui-focused": {
+      color: "#1e2730",
+    },
   },
 };
 
@@ -32,9 +29,9 @@ class SetTimeframe extends Component {
   render() {
     const { classes, timeframe } = this.props;
     return (
-      <div className={classes.timeframes}>
+      <div>
         <FormControl component="fieldset">
-          <FormLabel className={classes.timeframeLabel} component="legend">
+          <FormLabel className={classes.root} component="legend">
             Timeframe
           </FormLabel>
           <RadioGroup
@@ -45,12 +42,36 @@ class SetTimeframe extends Component {
             onChange={this.handleChange}
             className={classes.radioGroup}
           >
-            <FormControlLabel value="5d" control={<Radio />} label="5 Days" />
-            <FormControlLabel value="10d" control={<Radio />} label="10 Days" />
-            <FormControlLabel value="1m" control={<Radio />} label="1 Month" />
-            <FormControlLabel value="6m" control={<Radio />} label="6 Months" />
-            <FormControlLabel value="1y" control={<Radio />} label="1 Year" />
-            <FormControlLabel value="5y" control={<Radio />} label="5 Years" />
+            <FormControlLabel
+              value="5d"
+              control={<Radio color="default" />}
+              label="5 Days"
+            />
+            <FormControlLabel
+              value="10d"
+              control={<Radio color="default" />}
+              label="10 Days"
+            />
+            <FormControlLabel
+              value="1m"
+              control={<Radio color="default" />}
+              label="1 Month"
+            />
+            <FormControlLabel
+              value="6m"
+              control={<Radio color="default" />}
+              label="6 Months"
+            />
+            <FormControlLabel
+              value="1y"
+              control={<Radio color="default" />}
+              label="1 Year"
+            />
+            <FormControlLabel
+              value="5y"
+              control={<Radio color="default" />}
+              label="5 Years"
+            />
           </RadioGroup>
         </FormControl>
       </div>

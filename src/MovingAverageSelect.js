@@ -9,9 +9,19 @@ import ListItemText from "@material-ui/core/ListItemText";
 import FormLabel from "@material-ui/core/FormLabel";
 
 const styles = {
-  maLabel: {
-    whiteSpace: "nowrap",
-    color: "222",
+  root: {
+    color: "#1e2730",
+    fontWeight: "500",
+    "&.Mui-focused": {
+      color: "#1e2730",
+    },
+  },
+  underline: {
+    borderBottom: "1px solid #4a667a",
+    "&:after": {
+      // The MUI source seems to use this but it doesn't work
+      borderBottom: "1px solid #4a667a",
+    },
   },
 };
 
@@ -54,11 +64,11 @@ class MovingAverageSelect extends Component {
   render() {
     const { classes, fiftyIsChecked, twoHundredIsChecked } = this.props;
     return (
-      <form className={classes.root} autoComplete="off">
+      <form autoComplete="off">
         <FormControl>
           <FormLabel
             htmlFor="maOptions"
-            className={classes.maLabel}
+            className={classes.root}
             component="legend"
           >
             Moving Average
@@ -68,15 +78,24 @@ class MovingAverageSelect extends Component {
             multiple
             value={this.state.maSelected}
             onChange={this.handleChange}
-            input={<Input id="maOptions" />}
+            input={
+              <Input
+                classes={{ underline: classes.underline }}
+                id="maOptions"
+              />
+            }
             renderValue={(maSelected) => maSelected.join(", ")}
           >
             <MenuItem value="50">
-              <Checkbox value="50" checked={fiftyIsChecked} />
+              <Checkbox color="default" value="50" checked={fiftyIsChecked} />
               <ListItemText primary="50-day" />
             </MenuItem>
             <MenuItem value="200">
-              <Checkbox value="200" checked={twoHundredIsChecked} />
+              <Checkbox
+                color="default"
+                value="200"
+                checked={twoHundredIsChecked}
+              />
               <ListItemText primary="200-day" />
             </MenuItem>
           </Select>

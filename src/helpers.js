@@ -4,8 +4,19 @@ import dayjs from "dayjs";
 // 1d, 10d, 1m, 3m, 6m, 1y, 3y, 5y
 export const DRAWER_WIDTH = 240;
 
-export const POSITIVE = "#48bb78";
-export const NEGATIVE = "#C70039";
+export const POSITIVE = "#48c15e";
+export const NEGATIVE = "#ef6670";
+
+export const NUM_OF_DAYS = {
+  "5d": 5,
+  "10d": 10,
+  "1m": 30,
+  "3m": 92,
+  "6m": 183,
+  "1y": 365,
+  "3y": 1095,
+  "5y": 1825,
+};
 
 const TIMEMAPPING = {
   "5d": ["day", 5],

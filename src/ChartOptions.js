@@ -9,6 +9,7 @@ const styles = {
   ChartOptions: {
     display: "flex",
     justifyContent: "space-around",
+    minWidth: "280px",
   },
 };
 
@@ -25,11 +26,10 @@ class ChartOptions extends Component {
       ticker,
       appBarWidth,
     } = this.props;
-    // console.log("appBarWidth:", appBarWidth);
     return (
       <div className={classes.ChartOptions}>
         <div className={classes.maOptions}>
-          {appBarWidth > 600 ? (
+          {appBarWidth > 1100 ? (
             <MovingAverageContainer
               handleMaCheck={handleMaCheck}
               fiftyIsChecked={fiftyIsChecked}
@@ -44,7 +44,7 @@ class ChartOptions extends Component {
           )}
         </div>
         <div className={classes.timeframeOptions}>
-          {appBarWidth > 1000 ? (
+          {appBarWidth > 1100 ? (
             <SetTimeframe
               ticker={ticker}
               plotData={plotData}

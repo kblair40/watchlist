@@ -26,6 +26,8 @@ const styles = (theme) => ({
   },
   appBar: {
     padding: ".5rem",
+    backgroundColor: "#fff",
+    color: "#4a667a",
     marginLeft: drawerWidth,
     [theme.breakpoints.up("sm")]: {
       width: `calc(100% - ${drawerWidth}px)`,
@@ -36,30 +38,35 @@ const styles = (theme) => ({
     flexGrow: 1,
   },
   menuButton: {
-    marginRight: 20,
+    position: "relative",
+    right: 10,
     [theme.breakpoints.up("sm")]: {
       display: "none",
     },
   },
-  toolbar: theme.mixins.toolbar,
+  // toolbar: theme.mixins.toolbar,
+  toolbar: {
+    ...theme.mixins.toolbar,
+  },
   drawerPaper: {
     width: drawerWidth,
     padding: ".3rem",
   },
   content: {
     flexGrow: 1,
-    padding: `${theme.spacing.unit * 3}px ${theme.spacing.unit}px`,
+    padding: theme.spacing.unit,
+    paddingTop: theme.spacing.unit * 3,
   },
+  // ${theme.spacing.unit * 3}px
   customToolbar: {
     display: "flex",
     alignItems: "flex-end",
   },
-  drawerContainer: {
-    // height: "100%",
-  },
   summary: {
     display: "flex",
     justifyContent: "center",
+    alignItems: "flex-end",
+    // padding: "5px",
   },
 });
 
@@ -103,7 +110,6 @@ class Navbar extends Component {
   }
 
   render() {
-    // let { data } = { ...this.props };
     const {
       data,
       classes,
@@ -159,12 +165,7 @@ class Navbar extends Component {
 
     return (
       <div className={classes.root}>
-        <AppBar
-          id="appBar"
-          color="default"
-          position="fixed"
-          className={classes.appBar}
-        >
+        <AppBar id="appBar" position="fixed" className={classes.appBar}>
           <Toolbar className={classes.customToolbar}>
             <IconButton
               color="inherit"
@@ -176,6 +177,7 @@ class Navbar extends Component {
             </IconButton>
             <div className={classes.optionsContainer}>
               <ChartOptions
+                height={height}
                 appBarWidth={appBarWidth}
                 handleMaCheck={handleMaCheck}
                 fiftyIsChecked={fiftyIsChecked}
@@ -221,7 +223,7 @@ class Navbar extends Component {
           <div className={classes.toolbar} />
           <div className={classes.chartArea}>
             <ChartContainer
-              navHeight={height}
+              height={height}
               data={data}
               fiftyIsChecked={fiftyIsChecked}
               twoHundredIsChecked={twoHundredIsChecked}
