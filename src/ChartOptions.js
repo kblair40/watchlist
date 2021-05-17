@@ -8,7 +8,7 @@ import TimeframeSelect from "./TimeframeSelect";
 const styles = {
   ChartOptions: {
     display: "flex",
-    justifyContent: "space-evenly",
+    justifyContent: "space-around",
   },
 };
 
