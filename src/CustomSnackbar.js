@@ -16,7 +16,13 @@ const styles = (theme) => ({
 
 class CustomSnackbar extends Component {
   render() {
-    const { classes, openSnackbar, addTickerSuccess, userTickers } = this.props;
+    const {
+      classes,
+      openSnackbar,
+      errorTicker,
+      addTickerSuccess,
+      userTickers,
+    } = this.props;
     let mostRecentTickerAdded =
       userTickers[userTickers.length - 1].toUpperCase();
     console.log("SNACKBAR MOST RECENT: ", mostRecentTickerAdded);
@@ -43,7 +49,7 @@ class CustomSnackbar extends Component {
               </span>
             ) : (
               <span id="message-id">
-                Failed to add {mostRecentTickerAdded} to your watchlist
+                Failed to add {errorTicker.toUpperCase()} to your watchlist
               </span>
             )
           }

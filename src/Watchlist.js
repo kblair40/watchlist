@@ -32,6 +32,7 @@ class Watchlist extends Component {
       handleClick,
       userTickers,
       deleteTicker,
+      errorTicker,
     } = this.props;
     return (
       <div style={{ maxHeight: this.setWatchlistHeight }}>
@@ -52,6 +53,7 @@ class Watchlist extends Component {
           addTickerSuccess={addTickerSuccess}
           openSnackbar={openSnackbar}
           userTickers={userTickers}
+          errorTicker={errorTicker}
         />
       </div>
     );

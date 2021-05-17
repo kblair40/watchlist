@@ -130,6 +130,7 @@ class Navbar extends Component {
       handleInputFocus,
       openSnackbar,
       addTickerSuccess,
+      errorTicker,
       // mostRecentTickerAdded,
     } = this.props;
     const { height, appBarWidth, drawerHeight } = this.state;
@@ -152,6 +153,7 @@ class Navbar extends Component {
           plotData={plotData}
           openSnackbar={openSnackbar}
           addTickerSuccess={addTickerSuccess}
+          errorTicker={errorTicker}
         />
       </div>
     );

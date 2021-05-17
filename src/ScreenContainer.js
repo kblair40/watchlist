@@ -30,6 +30,7 @@ class ScreenContainer extends Component {
       isValidInput: true,
       openSnackbar: false,
       addTickerSuccess: false,
+      errorTicker: "",
     };
     this.handleTimeframeChange = this.handleTimeframeChange.bind(this);
     this.handleTickerChange = this.handleTickerChange.bind(this);
@@ -129,7 +130,14 @@ class ScreenContainer extends Component {
       userTickers: newTickers,
       openSnackbar: true,
       addTickerSuccess: success,
+      errorTicker: ticker,
     });
+    // let newTickers;
+    // if (success) {
+    //   newTickers = [...this.state.userTickers, ticker)]
+    // } else {
+    //   newTickers = [...this.state.userTickers]
+    // }
     setTimeout(() => {
       this.setState({ openSnackbar: false });
     }, 3000);
@@ -175,6 +183,7 @@ class ScreenContainer extends Component {
       isValidInput,
       openSnackbar,
       addTickerSuccess,
+      errorTicker,
     } = this.state;
     // let mostRecentTickerAdded = userTickers[userTickers.length - 1];
     // console.log("MOST RECENT: ", mostRecentTickerAdded);
@@ -206,6 +215,7 @@ class ScreenContainer extends Component {
             handleInputBlur={this.handleInputBlur}
             handleInputFocus={this.handleInputFocus}
             addTickerSuccess={addTickerSuccess}
+            errorTicker={errorTicker}
             // mostRecentTickerAdded={mostRecentTickerAdded}
           />
         </div>
