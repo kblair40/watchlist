@@ -2,12 +2,10 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Snackbar from "@material-ui/core/Snackbar";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import red from "@material-ui/core/colors/red";
-import ErrorIcon from "@material-ui/icons/Error";
 
 const styles = (theme) => ({
   close: {
-    padding: theme.spacing.unit / 2,
+    padding: theme.spacing(0.5),
   },
   error: {
     backgroundColor: "#ef6670",
@@ -28,11 +26,7 @@ class CustomSnackbar extends Component {
     } = this.props;
     let mostRecentTickerAdded =
       userTickers[userTickers.length - 1].toUpperCase();
-    console.log("SNACKBAR MOST RECENT: ", mostRecentTickerAdded);
-    console.log("SUCCESS ?", addTickerSuccess);
-    console.log("ERROR TICKER:", errorTicker);
     let tickerIsDuplicate = userTickers.includes(errorTicker);
-    console.log("DUPLICATE ?", tickerIsDuplicate);
     return (
       <Snackbar
         anchorOrigin={{
@@ -55,11 +49,9 @@ class CustomSnackbar extends Component {
               </span>
             ) : (
               <span id="message-id">
-                Failed to add {errorTicker.toUpperCase()} to your watchlist.
-                &nbsp;
                 {tickerIsDuplicate
-                  ? "Ticker is already in your watchlist."
-                  : "Ticker is invalid."}
+                  ? `${errorTicker.toUpperCase()} is already in your watchlist.`
+                  : `${errorTicker.toUpperCase()} is not a valid ticker.`}
               </span>
             )
           }

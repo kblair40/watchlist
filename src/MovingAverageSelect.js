@@ -7,21 +7,44 @@ import FormControl from "@material-ui/core/FormControl";
 import Checkbox from "@material-ui/core/Checkbox";
 import ListItemText from "@material-ui/core/ListItemText";
 import FormLabel from "@material-ui/core/FormLabel";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
 const styles = {
   root: {
-    color: "#1e2730",
-    fontWeight: "500",
-    "&.Mui-focused": {
-      color: "#1e2730",
+    color: "#4d5964",
+    "&$inputFocused": {
+      backgroundColor: "#fff",
+      color: "#4d5964",
     },
   },
-  underline: {
-    borderBottom: "1px solid #4a667a",
-    "&:after": {
-      // The MUI source seems to use this but it doesn't work
-      borderBottom: "1px solid #4a667a",
+  inputFocused: {},
+  labelRoot: {
+    color: "#000714",
+    "&$labelFocused": {
+      color: "#000714",
     },
+  },
+  labelFocused: {},
+  underline: {
+    borderBottom: "1px solid #24303a",
+    "&:after": {
+      borderBottom: "1px solid #24303a",
+    },
+  },
+  checkboxText: {
+    color: "#4d5964",
+  },
+  checkboxRoot: {
+    color: "#24303a",
+    backgroundColor: "transparent",
+    "&$checkboxChecked": {
+      color: "#24303a",
+    },
+  },
+  checkboxChecked: {},
+  checkedStyles: {
+    color: "#4d5964",
+    // backgroundColor: "red",
   },
 };
 
@@ -64,11 +87,14 @@ class MovingAverageSelect extends Component {
   render() {
     const { classes, fiftyIsChecked, twoHundredIsChecked } = this.props;
     return (
-      <form autoComplete="off">
+      <div className={classes.root}>
         <FormControl>
           <FormLabel
+            classes={{
+              root: classes.labelRoot,
+              focused: classes.labelFocused,
+            }}
             htmlFor="maOptions"
-            className={classes.root}
             component="legend"
           >
             Moving Average
@@ -80,27 +106,46 @@ class MovingAverageSelect extends Component {
             onChange={this.handleChange}
             input={
               <Input
-                classes={{ underline: classes.underline }}
+                classes={{
+                  root: classes.root,
+                  underline: classes.underline,
+                  focused: classes.inputFocused,
+                }}
                 id="maOptions"
               />
             }
             renderValue={(maSelected) => maSelected.join(", ")}
           >
             <MenuItem value="50">
-              <Checkbox color="default" value="50" checked={fiftyIsChecked} />
-              <ListItemText primary="50-day" />
+              <Checkbox
+                checkedIcon={<CheckBoxIcon className={classes.checkedStyles} />}
+                classes={{
+                  root: classes.checkboxRoot,
+                  checked: classes.checkboxChecked,
+                }}
+                value="50"
+                checked={fiftyIsChecked}
+              />
+              <ListItemText className={classes.checkboxText} primary="50-day" />
             </MenuItem>
             <MenuItem value="200">
               <Checkbox
-                color="default"
+                checkedIcon={<CheckBoxIcon className={classes.checkedStyles} />}
+                classes={{
+                  root: classes.checkboxRoot,
+                  checked: classes.checkboxChecked,
+                }}
                 value="200"
                 checked={twoHundredIsChecked}
               />
-              <ListItemText primary="200-day" />
+              <ListItemText
+                className={classes.checkboxText}
+                primary="200-day"
+              />
             </MenuItem>
           </Select>
         </FormControl>
-      </form>
+      </div>
     );
   }
 }

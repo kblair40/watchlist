@@ -7,6 +7,8 @@ export const DRAWER_WIDTH = 240;
 export const POSITIVE = "#48c15e";
 export const NEGATIVE = "#ef6670";
 
+export const TEST_REGEX = /^[a-z]{1,4}$/i;
+
 export const NUM_OF_DAYS = {
   "5d": 5,
   "10d": 10,

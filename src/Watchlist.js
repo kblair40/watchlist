@@ -17,6 +17,7 @@ const styles = {
   },
   watchlistContainer: {
     overflowY: "auto",
+    color: "#24303a",
   },
 };
 class Watchlist extends Component {
@@ -37,7 +38,7 @@ class Watchlist extends Component {
       <div style={{ maxHeight: this.setWatchlistHeight }}>
         <List className={classes.watchlistContainer}>
           {userTickers.map((ticker) => (
-            <ListItem button onClick={handleClick}>
+            <ListItem button key={ticker} onClick={handleClick}>
               <ListItemIcon>
                 <DeleteForeverOutlinedIcon
                   onClick={(e) => deleteTicker(e, ticker)}

@@ -58,8 +58,6 @@ class ChartContainer extends Component {
     if (data[0]) {
       let startPrice = data[0].price;
       let endPrice = data[data.length - 1].price;
-      console.log("isGain ?", endPrice > startPrice);
-      console.log("ROR:", ((endPrice - startPrice) / startPrice).toFixed(2));
       let rorAdj = NUM_OF_DAYS[this.props.timeframe] / 365;
       let ror = ((endPrice - startPrice) / startPrice) * 100;
       ror = (ror * rorAdj).toFixed(2);
@@ -73,19 +71,19 @@ class ChartContainer extends Component {
       data,
       dataMin,
       dataMax,
-      timeframe,
+      // timeframe,
       ticker,
       fiftyIsChecked,
       twoHundredIsChecked,
       fiftyPrice,
       twoHundredPrice,
-      height,
+      // height,
     } = this.props;
-    console.log("HEIGHT:", height);
+    // console.log("HEIGHT:", height);
     // let chartHeight = 400 - height;
-    let longTimeframe = ["5d", "10d", "1m", "6m"].includes(timeframe);
+    // let longTimeframe = ["5d", "10d", "1m", "6m"].includes(timeframe);
     let leftMargin = dataMax >= 1000 ? 15 : dataMax >= 100 ? 5 : 0;
-    let [posReturn, ror] = this.isGain(data);
+    // let [posReturn, ror] = this.isGain(data);
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer width="99%" height={350} maxHeight={350}>
@@ -96,34 +94,25 @@ class ChartContainer extends Component {
               bottom: 15,
               left: leftMargin,
             }}
-            posReturn={posReturn}
           >
             <defs>
               <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor={posReturn ? "#48c15e" : "#ef6670"}
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor={posReturn ? "#48c15e" : "#ef6670"}
-                  stopOpacity={0}
-                />
+                <stop offset="5%" stopColor="#4a667a" stopOpacity={0.6} />
+                <stop offset="95%" stopColor="#4a667a" stopOpacity={0} />
               </linearGradient>
             </defs>
             <XAxis
-              axisLine={{ stroke: "rgba(0,0,0,.4)" }}
-              tickLine={{ stroke: "rgba(0,0,0,.3)" }}
-              // allowDuplicatedCategory={false}
+              axisLine={{ stroke: "#000714" }}
+              tickLine={{ stroke: "#4d5964" }}
               interval="preserveEnd"
               minTickGap={25}
-              dataKey={longTimeframe ? "longDate" : "shortDate"}
+              // dataKey={longTimeframe ? "longDate" : "shortDate"}
+              dataKey={"longDate"}
               tickMargin={10}
             />
             <YAxis
-              axisLine={{ stroke: "rgba(0,0,0,.4)" }}
-              tickLine={{ stroke: "rgba(0,0,0,.3)" }}
+              axisLine={{ stroke: "#000714" }}
+              tickLine={{ stroke: "#4d5964" }}
               dataKey="price"
               domain={[dataMin, dataMax]}
             />
@@ -131,9 +120,9 @@ class ChartContainer extends Component {
               <ReferenceLine
                 y={fiftyPrice}
                 name="50-Day Moving Average"
-                stroke="rgba(0,0,0,.4)"
+                stroke="#4d5964"
                 label={{ position: "top", value: "50" }}
-                strokeDasharray=" 3"
+                strokeDasharray="3 3"
               />
             ) : (
               ""
@@ -142,19 +131,18 @@ class ChartContainer extends Component {
               <ReferenceLine
                 y={twoHundredPrice}
                 name="200-Day Moving Average"
-                stroke="rgba(0,0,0,.4)"
+                stroke="#4d5964"
                 label={{ position: "top", value: "200" }}
-                strokeDasharray=" 3"
+                strokeDasharray="3 3"
               />
             ) : (
               ""
             )}
-
             <Area
               dataKey="price"
               name={ticker.toUpperCase()}
               dot={false}
-              stroke={posReturn ? "#48c15e" : "#ef6670"}
+              stroke="#4d5964"
               activeDot={{ strokeWidth: 0.5 }}
               fillOpacity={1}
               fill="url(#colorUv)"

@@ -6,25 +6,29 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Input from "@material-ui/core/Input";
 
-const styles = (theme) => ({
+const styles = {
   root: {
-    color: "#1e2730",
-    fontWeight: "500",
-    "&.Mui-focused": {
-      color: "#1e2730",
+    color: "#4d5964",
+    "&$inputFocused": {
+      backgroundColor: "#fff",
+      color: "#4d5964",
     },
   },
+  inputFocused: {},
+  labelRoot: {
+    color: "#000714",
+    "&$labelFocused": {
+      color: "#000714",
+    },
+  },
+  labelFocused: {},
   underline: {
-    borderBottom: "1px solid #4a667a",
+    borderBottom: "1px solid #24303a",
     "&:after": {
-      // The MUI source seems to use this but it doesn't work
-      borderBottom: "1px solid #4a667a",
+      borderBottom: "1px solid #24303a",
     },
   },
-  formControl: {
-    minWidth: 120,
-  },
-});
+};
 
 class TimeframeSelect extends Component {
   constructor(props) {
@@ -40,9 +44,16 @@ class TimeframeSelect extends Component {
   render() {
     const { classes, timeframe } = this.props;
     return (
-      <form className={classes.root} autoComplete="off">
-        <FormControl className={classes.formControl}>
-          <FormLabel className={classes.root} component="legend">
+      <div className={classes.root}>
+        <FormControl>
+          <FormLabel
+            classes={{
+              root: classes.labelRoot,
+              focused: classes.labelFocused,
+            }}
+            component="legend"
+            htmlFor="timeframeOptions"
+          >
             Timeframe
           </FormLabel>
           <Select
@@ -51,8 +62,11 @@ class TimeframeSelect extends Component {
             onChange={this.handleChange}
             input={
               <Input
-                classes={{ underline: classes.underline }}
-                id="maOptions"
+                classes={{
+                  root: classes.root,
+                  underline: classes.underline,
+                  focused: classes.inputFocused,
+                }}
               />
             }
           >
@@ -64,7 +78,7 @@ class TimeframeSelect extends Component {
             <MenuItem value="5y">5 Years</MenuItem>
           </Select>
         </FormControl>
-      </form>
+      </div>
     );
   }
 }

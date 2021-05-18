@@ -2,15 +2,9 @@ import React, { Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Navbar from "./Navbar";
 import { getData, getMovingAverages, validateTickerInput } from "./helpers";
+import { TEST_REGEX } from "./helpers";
 
-const TEST_REGEX = /^[a-z]{1,4}$/i;
-
-const styles = {
-  ScreenContainer: {
-    // backgroundColor: "#24303a",
-    // color: "#fff",
-  },
-};
+const styles = {};
 
 class ScreenContainer extends Component {
   constructor(props) {
@@ -43,8 +37,13 @@ class ScreenContainer extends Component {
     this.handleInputFocus = this.handleInputFocus.bind(this);
   }
 
+  componentDidMount() {
+    let ticker = this.state.userTickers[0];
+    this.setData(ticker, this.state.timeframe);
+  }
+
   clearInput() {
-    let input = document.getElementById("newTickerInput");
+    let input = document.getElementById("new-ticker-input");
     input.value = "";
   }
 
@@ -79,7 +78,6 @@ class ScreenContainer extends Component {
 
   async handleTimeframeChange(e) {
     // THIS IS SETTING STATE CORRECTLY.  NOT SURE IF IT TRIGGERS RE-RENDER
-    console.log("CHANGE TIMEFRAME TO", e.target.value);
     this.setData(this.state.curTicker, e.target.value);
   }
 
@@ -104,7 +102,6 @@ class ScreenContainer extends Component {
       console.log("ERROR IN SET DATA:", `\n${e}`);
       return;
     }
-    console.log("replacementState:", replacementState);
     this.setState({ ...replacementState });
   }
 
@@ -131,13 +128,8 @@ class ScreenContainer extends Component {
       openSnackbar: true,
       addTickerSuccess: success,
       errorTicker: ticker,
+      tickerInput: "",
     });
-    // let newTickers;
-    // if (success) {
-    //   newTickers = [...this.state.userTickers, ticker)]
-    // } else {
-    //   newTickers = [...this.state.userTickers]
-    // }
     setTimeout(() => {
       this.setState({ openSnackbar: false });
     }, 3000);

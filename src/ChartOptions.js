@@ -8,8 +8,15 @@ import TimeframeSelect from "./TimeframeSelect";
 const styles = {
   ChartOptions: {
     display: "flex",
-    justifyContent: "space-around",
+    // justifyContent: "space-around",
+    justifyContent: "space-evenly",
     minWidth: "280px",
+  },
+  maOptions: {
+    marginRight: "1.5rem",
+  },
+  timeframeOptions: {
+    // marginLeft: 20,
   },
 };
 

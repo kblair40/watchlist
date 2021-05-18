@@ -44,20 +44,16 @@ const styles = (theme) => ({
       display: "none",
     },
   },
-  // toolbar: theme.mixins.toolbar,
-  toolbar: {
-    ...theme.mixins.toolbar,
-  },
+  toolbar: theme.mixins.toolbar,
   drawerPaper: {
     width: drawerWidth,
     padding: ".3rem",
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit,
-    paddingTop: theme.spacing.unit * 3,
+    padding: theme.spacing(1),
+    paddingTop: theme.spacing(3),
   },
-  // ${theme.spacing.unit * 3}px
   customToolbar: {
     display: "flex",
     alignItems: "flex-end",
@@ -66,7 +62,6 @@ const styles = (theme) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "flex-end",
-    // padding: "5px",
   },
 });
 
@@ -188,8 +183,6 @@ class Navbar extends Component {
                 timeframe={timeframe}
               />
             </div>
-
-            {/* <Button color="inherit">Login</Button> */}
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>

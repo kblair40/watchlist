@@ -5,14 +5,28 @@ import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
 const styles = {
   root: {
-    color: "#1e2730",
-    fontWeight: "500",
+    color: "#000714",
     "&.Mui-focused": {
-      color: "#1e2730",
+      color: "#000714",
     },
+  },
+  checkboxText: {
+    color: "#4d5964",
+  },
+  checkboxRoot: {
+    color: "#24303a",
+    backgroundColor: "transparent",
+    "&$checkboxChecked": {
+      color: "#24303a",
+    },
+  },
+  checkboxChecked: {},
+  checkedStyles: {
+    color: "#4d5964",
   },
 };
 
@@ -38,6 +52,13 @@ class MovingAverageContainer extends Component {
             <FormControlLabel
               control={
                 <Checkbox
+                  checkedIcon={
+                    <CheckBoxIcon className={classes.checkedStyles} />
+                  }
+                  classes={{
+                    root: classes.checkboxRoot,
+                    checked: classes.checkboxChecked,
+                  }}
                   onClick={handleMaCheck}
                   value="50"
                   checked={fiftyIsChecked}
@@ -45,10 +66,18 @@ class MovingAverageContainer extends Component {
                 />
               }
               label="50-day"
+              classes={{ label: classes.checkboxText }}
             />
             <FormControlLabel
               control={
                 <Checkbox
+                  checkedIcon={
+                    <CheckBoxIcon className={classes.checkedStyles} />
+                  }
+                  classes={{
+                    root: classes.checkboxRoot,
+                    checked: classes.checkboxChecked,
+                  }}
                   onClick={handleMaCheck}
                   value="200"
                   checked={twoHundredIsChecked}
@@ -56,6 +85,7 @@ class MovingAverageContainer extends Component {
                 />
               }
               label="200-day"
+              classes={{ label: classes.checkboxText }}
             />
           </FormGroup>
         </FormControl>

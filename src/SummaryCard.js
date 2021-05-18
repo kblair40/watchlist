@@ -12,8 +12,6 @@ import {
   formatCardDate,
   formatPE,
   formatDividend,
-  POSITIVE,
-  NEGATIVE,
 } from "./helpers";
 
 const styles = {
@@ -30,6 +28,7 @@ const styles = {
   info: {
     display: "flex",
     justifyContent: "space-between",
+    color: "#4d5964",
   },
   neg: {
     color: "#ef6670",
@@ -38,14 +37,19 @@ const styles = {
     color: "#48c15e",
   },
   curPrice: {
-    fontWeight: 700,
+    color: "#000714",
+    fontWeight: 500,
     fontSize: "1.8rem",
   },
   category: {
-    fontWeight: 400,
+    color: "#000714",
   },
   company: {
+    color: "#000714",
     fontWeight: 500,
+  },
+  tickerInfo: {
+    color: "#4d5964",
   },
 };
 class SummaryCard extends PureComponent {
@@ -132,43 +136,34 @@ class SummaryCard extends PureComponent {
     return (
       <Card className={classes.SummaryCard}>
         <CardContent>
-          <Typography className={classes.company} variant="h5">
+          <Typography className={classes.company} variant="h4">
             {shortName}
           </Typography>
-          <Typography component="p" gutterBottom>
+          <Typography component="p" className={classes.tickerInfo} gutterBottom>
             {`${exchangeName}:${ticker.toUpperCase()} - ${now}`}
           </Typography>
           <Typography component="p" gutterBottom>
-            {posToday ? (
-              <span className={classes.curInfo}>
-                <span className={classes.curPrice}>{regularMarketPrice}</span>
-                &nbsp;
+            <span className={classes.curInfo}>
+              <span className={classes.curPrice}>{regularMarketPrice}</span>
+              &nbsp;
+              {posToday ? (
                 <ArrowUpward className={classes.pos} />
-                &nbsp;
-                <span className={classes.pos}>
-                  {(regularMarketPrice - regularMarketOpen).toFixed(3)}
-                </span>
-                &nbsp;
-                <span className={classes.pos}>
-                  ({regularMarketChangePercent.toFixed(3)}%)
-                </span>
-              </span>
-            ) : (
-              <span className={classes.curInfo}>
-                <span className={classes.curPrice}>{regularMarketPrice}</span>
-                &nbsp;
+              ) : (
                 <ArrowDownward className={classes.neg} />
-                &nbsp;
-                <span className={classes.neg}>
-                  {(regularMarketPrice - regularMarketOpen).toFixed(3)}
-                </span>
-                &nbsp;
-                <span className={classes.neg}>
-                  {/* ({regularMarketChangePercent.toFixed(3)}%)( */}(
-                  {regularMarketChangePercent}%)
-                </span>
+              )}
+              &nbsp;
+              <span className={posToday ? classes.pos : classes.neg}>
+                {(regularMarketPrice - regularMarketOpen).toFixed(3)}
               </span>
-            )}
+              &nbsp;
+              <span className={posToday ? classes.pos : classes.neg}>
+                (
+                {regularMarketChangePercent
+                  ? regularMarketChangePercent.toFixed(3)
+                  : "n/a"}
+                %)
+              </span>
+            </span>
           </Typography>
           <div className={classes.infoContainer}>
             <Typography className={classes.info} component="div">
