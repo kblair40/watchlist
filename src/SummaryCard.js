@@ -71,24 +71,13 @@ class SummaryCard extends PureComponent {
     };
   }
   async componentDidUpdate() {
-    let response = await yahooFinance.quote(this.props.ticker);
-    // console.log("response:", response);
-    this.setState({
-      marketCap: response.marketCap,
-      shortName: response.shortName,
-      regularMarketPreviousClose: response.regularMarketPreviousClose,
-      trailingPE: response.trailingPE,
-      regularMarketOpen: response.regularMarketOpen,
-      regularMarketDayLow: response.regularMarketDayLow,
-      regularMarketDayHigh: response.regularMarketDayHigh,
-      regularMarketPrice: response.regularMarketPrice,
-      trailingAnnualDividendYield: response.trailingAnnualDividendYield,
-      regularMarketChangePercent: response.regularMarketChangePercent,
-      fullExchangeName: response.fullExchangeName,
-      ticker: this.props.ticker,
-    });
+    this.getCardData();
   }
   async componentDidMount() {
+    this.getCardData();
+  }
+
+  async getCardData() {
     let response = await yahooFinance.quote(this.props.ticker);
     if (response) {
       this.setState({
@@ -107,7 +96,7 @@ class SummaryCard extends PureComponent {
       });
     } else {
       console.log(
-        `FAILED IN summaryCard - UNABLE TO RETRIVE DATA FOR ${this.props.ticker}`
+        `FAILED IN summaryCard - UNABLE TO RETRIEVE DATA FOR ${this.props.ticker}`
       );
     }
   }
