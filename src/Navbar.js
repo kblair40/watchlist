@@ -8,6 +8,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { withStyles } from "@material-ui/core/styles";
 import Watchlist from "./Watchlist";
 import TickerInput from "./TickerInput";
+import Help from "./Help";
 import ChartContainer from "./ChartContainer";
 import ChartOptions from "./ChartOptions";
 import SummaryCard from "./SummaryCard";
@@ -183,6 +184,7 @@ class Navbar extends Component {
                 timeframe={timeframe}
               />
             </div>
+            <Help />
           </Toolbar>
         </AppBar>
         <nav className={classes.drawer}>

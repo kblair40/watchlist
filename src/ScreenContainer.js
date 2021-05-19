@@ -9,6 +9,7 @@ const styles = {};
 class ScreenContainer extends Component {
   constructor(props) {
     super(props);
+    const savedTickers = JSON.parse(window.localStorage.getItem("tickers"));
     this.state = {
       tickerInput: "",
       timeframe: "5d",
@@ -16,7 +17,7 @@ class ScreenContainer extends Component {
       dataMin: 0,
       dataMax: 0,
       curTicker: "aapl",
-      userTickers: ["aapl", "ibm", "dal", "upwk"],
+      userTickers: savedTickers || ["aapl", "ibm", "dal", "upwk"],
       fiftyPrice: 0,
       fiftyIsChecked: false,
       twoHundredPrice: 0,
@@ -35,6 +36,41 @@ class ScreenContainer extends Component {
     this.handleMaCheck = this.handleMaCheck.bind(this);
     this.handleInputBlur = this.handleInputBlur.bind(this);
     this.handleInputFocus = this.handleInputFocus.bind(this);
+  }
+
+  async addTicker(e) {
+    e.preventDefault();
+    this.clearInput();
+    const newTicker = this.state.tickerInput.toLowerCase();
+    const valResult = await validateTickerInput(newTicker);
+    if (!this.state.userTickers.includes(newTicker) && valResult) {
+      this.openSnackbar(newTicker, true);
+      // PUT THIS IN SETTIMEOUT?
+      // MIGHT NEED TO SET openSnackbar BACK TO FALSE
+    } else {
+      console.log("FAILURE IN addTicker - ScreenContainer");
+      console.log(`Unable to add ${newTicker}`);
+      this.openSnackbar(newTicker, false);
+      // RENDER SNACKBAR WITH ERROR HERE
+    }
+  }
+
+  deleteTicker(e, ticker) {
+    e.stopPropagation();
+    this.setState(
+      {
+        userTickers: this.state.userTickers.filter((tick) => tick !== ticker),
+      },
+      this.syncLocalStorage
+    );
+  }
+
+  syncLocalStorage() {
+    // Save tickers in user's watchlist to local storage
+    window.localStorage.setItem(
+      "tickers",
+      JSON.stringify(this.state.userTickers)
+    );
   }
 
   componentDidMount() {
@@ -123,40 +159,19 @@ class ScreenContainer extends Component {
     let newTickers = success
       ? [...this.state.userTickers, ticker]
       : [...this.state.userTickers];
-    this.setState({
-      userTickers: newTickers,
-      openSnackbar: true,
-      addTickerSuccess: success,
-      errorTicker: ticker,
-      tickerInput: "",
-    });
+    this.setState(
+      {
+        userTickers: newTickers,
+        openSnackbar: true,
+        addTickerSuccess: success,
+        errorTicker: ticker,
+        tickerInput: "",
+      },
+      this.syncLocalStorage
+    );
     setTimeout(() => {
       this.setState({ openSnackbar: false });
     }, 3000);
-  }
-
-  async addTicker(e) {
-    e.preventDefault();
-    this.clearInput();
-    const newTicker = this.state.tickerInput.toLowerCase();
-    const valResult = await validateTickerInput(newTicker);
-    if (!this.state.userTickers.includes(newTicker) && valResult) {
-      this.openSnackbar(newTicker, true);
-      // PUT THIS IN SETTIMEOUT?
-      // MIGHT NEED TO SET openSnackbar BACK TO FALSE
-    } else {
-      console.log("FAILURE IN addTicker - ScreenContainer");
-      console.log(`Unable to add ${newTicker}`);
-      this.openSnackbar(newTicker, false);
-      // RENDER SNACKBAR WITH ERROR HERE
-    }
-  }
-
-  deleteTicker(e, ticker) {
-    e.stopPropagation();
-    this.setState({
-      userTickers: this.state.userTickers.filter((tick) => tick !== ticker),
-    });
   }
 
   render() {
