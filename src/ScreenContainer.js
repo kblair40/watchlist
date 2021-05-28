@@ -17,7 +17,7 @@ class ScreenContainer extends Component {
       dataMin: 0,
       dataMax: 0,
       curTicker: "aapl",
-      userTickers: savedTickers || ["aapl", "ibm", "dal", "upwk"],
+      userTickers: savedTickers || ["aapl", "spy"],
       fiftyPrice: 0,
       fiftyIsChecked: false,
       twoHundredPrice: 0,

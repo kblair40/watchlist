@@ -24,8 +24,13 @@ class CustomSnackbar extends Component {
       addTickerSuccess,
       userTickers,
     } = this.props;
-    let mostRecentTickerAdded =
-      userTickers[userTickers.length - 1].toUpperCase();
+    let mostRecentTickerAdded;
+    try {
+      mostRecentTickerAdded = userTickers[userTickers.length - 1].toUpperCase();
+    } catch (e) {
+      mostRecentTickerAdded = null;
+    }
+
     let tickerIsDuplicate = userTickers.includes(errorTicker);
     return (
       <Snackbar

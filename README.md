@@ -1,70 +1,29 @@
-# Getting Started with Create React App
+# Stock Tracker
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Stock Tracker is an app that allows users to track stock performance of the companies, ETFs and indexes they choose.
 
-## Available Scripts
+Link to it here...
 
-In the project directory, you can run:
+## Usage
 
-### `npm start`
+You will need to disable CORS in your browser before it will work.  
+A plugin is required if using Chrome or Firefox. See here for Chrome and here for Firefox.
+If using Safari, you can disable CORS directly in the Develop menu. See here for instructions how.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Initial Setup
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+By default, you will have AAPL in your watchlist. To delete it, or any ticker you choose to add, simply click on the trash can icon next to it.
 
-### `npm test`
+## Adding Tickers
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To add a ticker, just enter the symbol in the upper-left input line and press the enter key or click on the green '+' sign. Do not worry about adding invalid tickers, it will not allow you to do that.
 
-### `npm run build`
+## Viewing Data
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To view details of a ticker in your watchlist, just click on the ticker you would like to view. At the top of the screen, you can select moving averages which will be displayed as a single horizontal line across the chart. 50-day and 200-day moving averages are the current options. You can also select a timeframe of price history to view.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+The current day's price activity as well as some other fundamental information about the company you have selected is displayed in a card at the bottom.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Saving Your Watchlist
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+You do not need to manually save your watchlist. Instead, it will be saved to your browser's local storage by default.
