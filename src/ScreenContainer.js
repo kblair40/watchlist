@@ -118,6 +118,7 @@ class ScreenContainer extends Component {
   }
 
   async setData(ticker, timeframe = this.state.timeframe) {
+    console.log("SETTING DATA");
     // if timeframe if passed as argument to timeRange, timeRange will be used.
     //    Otherwise, current timeframe in state will be used.
     let replacementState = {};
