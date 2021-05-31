@@ -1,5 +1,6 @@
 import yahooFinance from "yahoo-finance2";
 import dayjs from "dayjs";
+import axios from "axios";
 
 // 1d, 10d, 1m, 3m, 6m, 1y, 3y, 5y
 export const DRAWER_WIDTH = 240;
@@ -32,9 +33,11 @@ const TIMEMAPPING = {
 };
 
 export async function validateTickerInput(ticker) {
-  let result = await getData(ticker, "5d");
-  console.log("RESULT:", result ? true : false);
-  return result ? true : false;
+  let result = await axios.get(`http://localhost:5000/${ticker}`);
+  // let result = await getData(ticker, "5d");
+  console.log("RESULT:", result);
+  // console.log("LENGTH:", result);
+  return result.data.isValid; //result.data.length ? true : false;
 }
 
 export function formatDividend(div) {
@@ -139,12 +142,74 @@ export async function getData(ticker, timeframe) {
 
 export async function getMovingAverages(ticker) {
   try {
-    let quoteSum = await yahooFinance.quoteSummary(ticker);
-    let fifty = quoteSum.summaryDetail.fiftyDayAverage;
-    let twoHundred = quoteSum.summaryDetail.twoHundredDayAverage;
+    let movingAvg = await axios.get(`http://localhost:5000/${ticker}`);
+    console.log("HELPERS MA:", movingAvg);
+    let fifty = movingAvg.data.movingAverages["50"];
+    let twoHundred = movingAvg.data.movingAverages["200"];
+    console.log("FIFTY:", fifty);
+    console.log("TWO HUNDRED:", twoHundred, typeof twoHundred);
     return [fifty, twoHundred];
   } catch (e) {
     console.log(`ERROR - UNABLE TO RETRIEVE MOVING AVERAGES FOR ${ticker}`);
     return [null, null];
   }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// export async function getMovingAverages(ticker) {
+//   try {
+//     let quoteSum = await yahooFinance.quoteSummary(ticker);
+//     let fifty = quoteSum.summaryDetail.fiftyDayAverage;
+//     let twoHundred = quoteSum.summaryDetail.twoHundredDayAverage;
+//     return [fifty, twoHundred];
+//   } catch (e) {
+//     console.log(`ERROR - UNABLE TO RETRIEVE MOVING AVERAGES FOR ${ticker}`);
+//     return [null, null];
+//   }
+// }
+
+// export async function validateTickerInput(ticker) {
+//   let result = await getData(ticker, "5d");
+//   console.log("RESULT:", result ? true : false);
+//   return result ? true : false;
+// }
+
+// export async function getData(ticker, timeframe) {
+//   let toSub = TIMEMAPPING[timeframe];
+//   let startDate = dayjs().subtract(toSub[1], toSub[0])["$d"];
+//   let options = { period1: startDate };
+//   let rawData;
+//   try {
+//     rawData = await yahooFinance.historical(ticker, options);
+//   } catch (error) {
+//     console.log("ERROR IN GET DATA (helpers.js)");
+//     rawData = null;
+//     return rawData;
+//   }
+//   // console.log("RAW DATA:", rawData);
+//   let min = rawData[0].adjClose;
+//   let max = rawData[0].adjClose;
+//   let data = [];
+//   for (let obj of rawData) {
+//     if (obj.adjClose < min) {
+//       min = obj.adjClose;
+//     }
+//     if (obj.adjClose > max) {
+//       max = obj.adjClose;
+//     }
+//     data.push({
+//       shortDate: dayjs(obj.date).format("MMM 'YY"),
+//       longDate: dayjs(obj.date).format("MMM D, 'YY"),
+//       price: parseFloat(obj.adjClose.toFixed(2)),
+//     });
+//   }
+//   // console.log("getData returning", data);
+//   return [data, min * 0.9, max * 1.1];
+// }
