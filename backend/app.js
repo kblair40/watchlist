@@ -1,7 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const yf = require("yahoo-finance");
 const app = express();
 const port = 5000;
+
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("HOME");
@@ -65,7 +68,7 @@ function modifyMa(movingAverages) {
   return movingAverages;
 }
 
-function formatQuery(query) {
-  console.log("query:", query);
-  return query;
-}
+// function formatQuery(query) {
+//   console.log("query:", query);
+//   return query;
+// }
