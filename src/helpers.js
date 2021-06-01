@@ -111,11 +111,10 @@ export async function getData(ticker, timeframe) {
   let toSub = TIMEMAPPING[timeframe];
   let from = dayjs().subtract(toSub[1], toSub[0])["$d"];
   let to = dayjs()["$d"];
-  let options = { from, to };
   let dataUrl = `http://localhost:5000/${ticker}?from=${from}&to=${to}`;
   let data = await axios.get(dataUrl);
   data = data.data;
-  const { isValid, prices, summary, movingAverages } = data;
+  const { isValid, prices, summary, movingAverages, priceInfo } = data;
   let chartData = [];
   let min = Infinity,
     max = -Infinity;
@@ -133,7 +132,7 @@ export async function getData(ticker, timeframe) {
     }
   }
 
-  return [chartData, min * 0.9, max * 1.1];
+  return [chartData.reverse(), min * 0.9, max * 1.1, summary, priceInfo];
 }
 
 export async function getMovingAverages(ticker) {

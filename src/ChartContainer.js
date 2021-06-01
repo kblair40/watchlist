@@ -1,6 +1,6 @@
 import { withStyles } from "@material-ui/core/styles";
 import CustomTooltip from "./CustomTooltip";
-import React, { Component } from "react";
+import React, { PureComponent, Component } from "react";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import { NUM_OF_DAYS } from "./helpers";
@@ -54,6 +54,9 @@ const renderLegend = (props) => {
 };
 
 class ChartContainer extends Component {
+  componentDidMount() {
+    this.setState({ chartIsLoading: false });
+  }
   isGain(data) {
     if (data[0]) {
       let startPrice = data[0].price;
@@ -71,19 +74,15 @@ class ChartContainer extends Component {
       data,
       dataMin,
       dataMax,
-      // timeframe,
       ticker,
       fiftyIsChecked,
       twoHundredIsChecked,
       fiftyPrice,
       twoHundredPrice,
-      // height,
     } = this.props;
-    // console.log("HEIGHT:", height);
-    // let chartHeight = 400 - height;
-    // let longTimeframe = ["5d", "10d", "1m", "6m"].includes(timeframe);
     let leftMargin = dataMax >= 1000 ? 15 : dataMax >= 100 ? 5 : 0;
     // let [posReturn, ror] = this.isGain(data);
+
     return (
       <div className={classes.ChartContainer}>
         <ResponsiveContainer width="99%" height={350} maxHeight={350}>
@@ -101,6 +100,7 @@ class ChartContainer extends Component {
                 <stop offset="95%" stopColor="#4a667a" stopOpacity={0} />
               </linearGradient>
             </defs>
+
             <XAxis
               axisLine={{ stroke: "#000714" }}
               tickLine={{ stroke: "#4d5964" }}

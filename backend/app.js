@@ -35,8 +35,10 @@ app.get("/:ticker", async (req, res) => {
     res.send(data);
   }
   data["prices"] = prices;
-  const quoteSum = await yf.quote(ticker);
+  const quoteSum = await yf.quote(ticker, ["summaryDetail", "price"]);
+  // console.log("quoteSum:", quoteSum);
   data["summary"] = quoteSum.summaryDetail;
+  data["priceInfo"] = quoteSum.price;
   let movingAverages = {
     50: quoteSum.summaryDetail.fiftyDayAverage,
     200: quoteSum.summaryDetail.twoHundredDayAverage,

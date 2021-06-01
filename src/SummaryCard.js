@@ -1,11 +1,10 @@
-import React, { PureComponent } from "react";
+import React, { PureComponent, Component } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import yahooFinance from "yahoo-finance2";
 import {
   formatMarketCap,
   formatExchange,
@@ -53,75 +52,28 @@ const styles = {
   },
 };
 class SummaryCard extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ticker: null,
-      marketCap: null,
-      shortName: null,
-      regularMarketPreviousClose: null,
-      trailingPE: null,
-      regularMarketOpen: null,
-      regularMarketDayLow: null,
-      regularMarketDayHigh: null,
-      regularMarketPrice: null,
-      trailingAnnualDividendYield: null,
-      regularMarketChangePercent: null,
-      fullExchangeName: null,
-    };
-  }
-  async componentDidUpdate() {
-    this.getCardData();
-  }
-  async componentDidMount() {
-    this.getCardData();
-  }
-
-  async getCardData() {
-    let response = await yahooFinance.quote(this.props.ticker);
-    if (response) {
-      this.setState({
-        marketCap: response.marketCap,
-        shortName: response.shortName,
-        regularMarketPreviousClose: response.regularMarketPreviousClose,
-        trailingPE: response.trailingPE,
-        regularMarketOpen: response.regularMarketOpen,
-        regularMarketDayLow: response.regularMarketDayLow,
-        regularMarketDayHigh: response.regularMarketDayHigh,
-        regularMarketPrice: response.regularMarketPrice,
-        trailingAnnualDividendYield: response.trailingAnnualDividendYield,
-        regularMarketChangePercent: response.regularMarketChangePercent,
-        fullExchangeName: response.fullExchangeName,
-        ticker: this.props.ticker,
-      });
-    } else {
-      console.log(
-        `FAILED IN summaryCard - UNABLE TO RETRIEVE DATA FOR ${this.props.ticker}`
-      );
-    }
-  }
-
   render() {
+    if (this.props.chartIsLoading) {
+      return <div>LOADING</div>;
+    }
+    if (!this.props.summary) return null;
     const {
-      marketCap,
       shortName,
-      regularMarketPreviousClose,
-      trailingPE,
-      regularMarketOpen,
-      regularMarketDayLow,
-      regularMarketDayHigh,
       regularMarketPrice,
-      trailingAnnualDividendYield,
+      // trailingAnnualDividendYield,
       regularMarketChangePercent,
-      fullExchangeName,
-    } = this.state;
+      exchangeName,
+    } = this.props.priceInfo;
+    const { marketCap, previousClose, trailingPE, open, dayLow, dayHigh } =
+      this.props.summary;
     const { classes, ticker } = this.props;
     let cap = formatMarketCap(marketCap);
-    let exchangeName = formatExchange(fullExchangeName);
+    let exchange = formatExchange(exchangeName);
     let pe = formatPE(trailingPE);
-    let div = formatDividend(trailingAnnualDividendYield);
+    // let div = formatDividend(trailingAnnualDividendYield);
     let now = formatCardDate();
-    let posToday = regularMarketPrice > regularMarketOpen;
+    let posToday = regularMarketPrice > open;
+
     return (
       <Card className={classes.SummaryCard}>
         <CardContent>
@@ -129,7 +81,7 @@ class SummaryCard extends PureComponent {
             {shortName}
           </Typography>
           <Typography component="p" className={classes.tickerInfo} gutterBottom>
-            {`${exchangeName}:${ticker.toUpperCase()} - ${now}`}
+            {`${exchange}:${ticker.toUpperCase()} - ${now}`}
           </Typography>
           <Typography component="p" gutterBottom>
             <span className={classes.curInfo}>
@@ -142,7 +94,7 @@ class SummaryCard extends PureComponent {
               )}
               &nbsp;
               <span className={posToday ? classes.pos : classes.neg}>
-                {(regularMarketPrice - regularMarketOpen).toFixed(3)}
+                {(regularMarketPrice - open).toFixed(3)}
               </span>
               &nbsp;
               <span className={posToday ? classes.pos : classes.neg}>
@@ -156,20 +108,19 @@ class SummaryCard extends PureComponent {
           </Typography>
           <div className={classes.infoContainer}>
             <Typography className={classes.info} component="div">
-              <span className={classes.category}>Open</span>{" "}
-              <span>{regularMarketOpen}</span>
+              <span className={classes.category}>Open</span> <span>{open}</span>
             </Typography>
             <Typography className={classes.info} component="div">
               <span className={classes.category}>Prev Close</span>{" "}
-              <span>{regularMarketPreviousClose}</span>
+              <span>{previousClose}</span>
             </Typography>
             <Typography className={classes.info} component="div">
               <span className={classes.category}>High</span>{" "}
-              <span>{regularMarketDayHigh}</span>
+              <span>{dayHigh}</span>
             </Typography>
             <Typography className={classes.info} component="div">
               <span className={classes.category}>Low</span>{" "}
-              <span>{regularMarketDayLow}</span>
+              <span>{dayLow}</span>
             </Typography>
             <Typography className={classes.info} component="div">
               <span className={classes.category}>Market Cap</span>{" "}
@@ -181,7 +132,7 @@ class SummaryCard extends PureComponent {
             </Typography>
             <Typography className={classes.info} component="div">
               <span className={classes.category}>Dividend yield </span>
-              <span>{div ? div : "n/a"}</span>
+              {/* <span>{div ? div : "n/a"}</span> */}
             </Typography>
           </div>
         </CardContent>

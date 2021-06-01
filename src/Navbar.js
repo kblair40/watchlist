@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Drawer from "@material-ui/core/Drawer";
 import Hidden from "@material-ui/core/Hidden";
@@ -133,6 +133,9 @@ class Navbar extends Component {
       openSnackbar,
       addTickerSuccess,
       errorTicker,
+      summary,
+      priceInfo,
+      chartIsLoading,
     } = this.props;
     const { height, appBarWidth, drawerHeight } = this.state;
     const drawer = (
@@ -231,7 +234,12 @@ class Navbar extends Component {
             />
           </div>
           <div className={classes.summary}>
-            <SummaryCard ticker={ticker} />
+            <SummaryCard
+              ticker={ticker}
+              summary={summary}
+              priceInfo={priceInfo}
+              chartIsLoading={chartIsLoading}
+            />
           </div>
         </main>
       </div>
