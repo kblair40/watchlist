@@ -13,17 +13,12 @@ app.get("/", (req, res) => {
 app.get("/:ticker", async (req, res) => {
   let queryReceived = true;
   if (Object.keys(req.query).length > 0) {
-    console.log("QUERY RECEIVED:", req.query);
-    // [to, from] = formatQuery([req.query.to, req.query.from]);
     query = { to: req.query.to, from: req.query.from };
-    console.log(query);
   } else {
-    console.log("NO QUERY RECEIVED");
     queryReceived = false;
   }
 
   const ticker = req.params.ticker;
-  console.log("ticker:", ticker);
   const prices = await yf.historical({
     symbol: ticker,
     from: queryReceived ? query.from : null,
@@ -31,12 +26,10 @@ app.get("/:ticker", async (req, res) => {
   });
   let data = { isValid: prices.length > 0 };
   if (!data["isValid"]) {
-    console.log("EARLY RETURN");
     res.send(data);
   }
   data["prices"] = prices;
   const quoteSum = await yf.quote(ticker, ["summaryDetail", "price"]);
-  // console.log("quoteSum:", quoteSum);
   data["summary"] = quoteSum.summaryDetail;
   data["priceInfo"] = quoteSum.price;
   let movingAverages = {
@@ -45,7 +38,6 @@ app.get("/:ticker", async (req, res) => {
   };
   movingAverages = modifyMa(movingAverages);
   data["movingAverages"] = { ...movingAverages };
-  console.log("DATA:", data);
   res.send(data);
 });
 
