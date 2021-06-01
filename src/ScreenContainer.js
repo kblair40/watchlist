@@ -108,15 +108,18 @@ class ScreenContainer extends Component {
 
   async handleWatchlistClick(e) {
     const ticker = e.target.innerText;
-    this.setData(ticker, this.state.timeframe);
+    this.setData(ticker, "watchlist", this.state.timeframe);
   }
 
   async handleTimeframeChange(e) {
-    this.setData(this.state.curTicker, e.target.value);
+    this.setData(this.state.curTicker, "timeframe", e.target.value);
   }
 
-  async setData(ticker, timeframe = this.state.timeframe) {
-    this.setState({ chartIsLoading: true });
+  async setData(ticker, caller, timeframe = this.state.timeframe) {
+    if (caller === "watchlist") {
+      this.setState({ chartIsLoading: true });
+    }
+
     let replacementState = {};
     try {
       let [fifty, twoHundred] = await getMovingAverages(ticker);

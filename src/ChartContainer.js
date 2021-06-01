@@ -1,6 +1,6 @@
 import { withStyles } from "@material-ui/core/styles";
 import CustomTooltip from "./CustomTooltip";
-import React, { PureComponent, Component } from "react";
+import React, { Component } from "react";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import { NUM_OF_DAYS } from "./helpers";
@@ -106,7 +106,6 @@ class ChartContainer extends Component {
               tickLine={{ stroke: "#4d5964" }}
               interval="preserveEnd"
               minTickGap={25}
-              // dataKey={longTimeframe ? "longDate" : "shortDate"}
               dataKey={"longDate"}
               tickMargin={10}
             />

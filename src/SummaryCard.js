@@ -1,16 +1,16 @@
-import React, { PureComponent, Component } from "react";
+import React, { PureComponent } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import ArrowUpward from "@material-ui/icons/ArrowUpward";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
+import Loading from "./Loading";
 import {
   formatMarketCap,
   formatExchange,
   formatCardDate,
-  formatPE,
-  formatDividend,
+  formatTwo,
 } from "./helpers";
 
 const styles = {
@@ -50,29 +50,52 @@ const styles = {
   tickerInfo: {
     color: "#4d5964",
   },
+  loading: {
+    height: "20rem",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 };
 class SummaryCard extends PureComponent {
   render() {
-    if (this.props.chartIsLoading) {
-      return <div>LOADING</div>;
-    }
     if (!this.props.summary) return null;
     const {
       shortName,
       regularMarketPrice,
-      // trailingAnnualDividendYield,
       regularMarketChangePercent,
       exchangeName,
     } = this.props.priceInfo;
-    const { marketCap, previousClose, trailingPE, open, dayLow, dayHigh } =
-      this.props.summary;
+    let {
+      marketCap,
+      fiftyTwoWeekHigh: yearHigh,
+      fiftyTwoWeekLow: yearLow,
+      previousClose,
+      trailingPE,
+      open,
+      dayLow,
+      dayHigh,
+    } = this.props.summary;
     const { classes, ticker } = this.props;
+
+    [open, dayLow, dayHigh] = [
+      formatTwo(open),
+      formatTwo(dayLow),
+      formatTwo(dayHigh),
+    ];
     let cap = formatMarketCap(marketCap);
     let exchange = formatExchange(exchangeName);
-    let pe = formatPE(trailingPE);
-    // let div = formatDividend(trailingAnnualDividendYield);
+    let pe = formatTwo(trailingPE);
     let now = formatCardDate();
     let posToday = regularMarketPrice > open;
+    if (this.props.chartIsLoading) {
+      return (
+        <Card className={classes.loading}>
+          <Loading />
+        </Card>
+      );
+    }
 
     return (
       <Card className={classes.SummaryCard}>
@@ -131,8 +154,8 @@ class SummaryCard extends PureComponent {
               <span>{pe ? pe : "n/a"}</span>
             </Typography>
             <Typography className={classes.info} component="div">
-              <span className={classes.category}>Dividend yield </span>
-              {/* <span>{div ? div : "n/a"}</span> */}
+              <span className={classes.category}>52 Wk Range</span>
+              <span>{`${yearLow} - ${yearHigh}`}</span>
             </Typography>
           </div>
         </CardContent>
