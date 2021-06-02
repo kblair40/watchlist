@@ -14,9 +14,13 @@ If using Safari, you can disable CORS directly in the Develop menu. See here for
 
 By default, you will have AAPL in your watchlist. To delete it, or any ticker you choose to add, simply click on the trash can icon next to it.
 
+![Gif showing initial setup and how to delete a ticker](./assets/gifs/deleting_tickers.gif)
+
 ## Adding Tickers
 
 To add a ticker, just enter the symbol in the upper-left input line and press the enter key or click on the green '+' sign. Do not worry about adding invalid tickers, it will not allow you to do that.
+
+![Gif showing how to add ticker to watchlist](./assets/gifs/adding_tickers.gif)
 
 ## Viewing Data
 
