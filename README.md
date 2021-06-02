@@ -22,6 +22,8 @@ To add a ticker, just enter the symbol in the upper-left input line and press th
 
 To view details of a ticker in your watchlist, just click on the ticker you would like to view. At the top of the screen, you can select moving averages which will be displayed as a single horizontal line across the chart. 50-day and 200-day moving averages are the current options. You can also select a timeframe of price history to view.
 
+![Gif showing data viewing functionality](./assets/gifs/viewing_data.gif)
+
 The current day's price activity as well as some other fundamental information about the company you have selected is displayed in a card at the bottom.
 
 ## Saving Your Watchlist
