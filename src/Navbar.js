@@ -133,9 +133,6 @@ class Navbar extends Component {
       openSnackbar,
       addTickerSuccess,
       errorTicker,
-      summary,
-      priceInfo,
-      chartIsLoading,
     } = this.props;
     const { height, appBarWidth, drawerHeight } = this.state;
     const drawer = (
@@ -234,12 +231,7 @@ class Navbar extends Component {
             />
           </div>
           <div className={classes.summary}>
-            <SummaryCard
-              ticker={ticker}
-              summary={summary}
-              priceInfo={priceInfo}
-              chartIsLoading={chartIsLoading}
-            />
+            <SummaryCard ticker={ticker} />
           </div>
         </main>
       </div>

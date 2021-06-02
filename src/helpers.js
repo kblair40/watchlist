@@ -1,6 +1,5 @@
-// import yahooFinance from "yahoo-finance2";
+import yahooFinance from "yahoo-finance2";
 import dayjs from "dayjs";
-import axios from "axios";
 
 // 1d, 10d, 1m, 3m, 6m, 1y, 3y, 5y
 export const DRAWER_WIDTH = 240;
@@ -21,16 +20,32 @@ export const NUM_OF_DAYS = {
   "5y": 1825,
 };
 
+const TIMEMAPPING = {
+  "5d": ["day", 5],
+  "10d": ["day", 10],
+  "1m": ["month", 1],
+  "3m": ["month", 3],
+  "6m": ["month", 6],
+  "1y": ["year", 1],
+  "3y": ["year", 3],
+  "5y": ["year", 5],
+};
+
 export async function validateTickerInput(ticker) {
-  let result = await axios.get(`http://localhost:5000/${ticker}`);
-  // let result = await getData(ticker, "5d");
-  console.log("RESULT:", result);
-  // console.log("LENGTH:", result);
-  return result.data.isValid; //result.data.length ? true : false;
+  let result = await getData(ticker, "5d");
+  console.log("RESULT:", result ? true : false);
+  return result ? true : false;
 }
 
-export function formatTwo(num) {
-  return num ? num.toFixed(2) : null;
+export function formatDividend(div) {
+  if (div) {
+    return (div * 100).toFixed(2) + "%";
+  }
+  return null;
+}
+
+export function formatPE(pe) {
+  return pe ? pe.toFixed(2) : null;
 }
 
 export function formatMarketCap(marketCap) {
@@ -89,54 +104,47 @@ let timezones = {
   "-0300": "PST",
 };
 
-const TIMEMAPPING = {
-  "5d": ["day", 5],
-  "10d": ["day", 10],
-  "1m": ["month", 1],
-  "3m": ["month", 3],
-  "6m": ["month", 6],
-  "1y": ["year", 1],
-  "3y": ["year", 3],
-  "5y": ["year", 5],
-};
-
 export async function getData(ticker, timeframe) {
   let toSub = TIMEMAPPING[timeframe];
-  let from = dayjs().subtract(toSub[1], toSub[0])["$d"];
-  let to = dayjs()["$d"];
-  let dataUrl = `http://localhost:5000/${ticker}?from=${from}&to=${to}`;
-  let data = await axios.get(dataUrl);
-  data = data.data;
-  const { prices, summary, priceInfo } = data;
-  let chartData = [];
-  let min = Infinity,
-    max = -Infinity;
-  for (let obj of prices) {
-    chartData.push({
-      shortDate: dayjs(obj.date).format("MMM 'YY"),
-      longDate: dayjs(obj.date).format("MMM D, 'YY"),
-      price: parseFloat(obj.adjClose.toFixed(2)),
-    });
+  let startDate = dayjs().subtract(toSub[1], toSub[0])["$d"];
+  let options = { period1: startDate };
+  let rawData;
+  try {
+    rawData = await yahooFinance.historical(ticker, options);
+  } catch (error) {
+    console.log("ERROR IN GET DATA (helpers.js)");
+    rawData = null;
+    return rawData;
+  }
+  // console.log("RAW DATA:", rawData);
+  let min = rawData[0].adjClose;
+  let max = rawData[0].adjClose;
+  let data = [];
+  for (let obj of rawData) {
     if (obj.adjClose < min) {
       min = obj.adjClose;
     }
     if (obj.adjClose > max) {
       max = obj.adjClose;
     }
+    data.push({
+      shortDate: dayjs(obj.date).format("MMM 'YY"),
+      longDate: dayjs(obj.date).format("MMM D, 'YY"),
+      price: parseFloat(obj.adjClose.toFixed(2)),
+    });
   }
-
-  return [chartData.reverse(), min * 0.9, max * 1.1, summary, priceInfo];
+  // console.log("getData returning", data);
+  return [data, min * 0.9, max * 1.1];
 }
 
 export async function getMovingAverages(ticker) {
   try {
-    let movingAvg = await axios.get(`http://localhost:5000/${ticker}`);
-    let fifty = movingAvg.data.movingAverages["50"];
-    let twoHundred = movingAvg.data.movingAverages["200"];
+    let quoteSum = await yahooFinance.quoteSummary(ticker);
+    let fifty = quoteSum.summaryDetail.fiftyDayAverage;
+    let twoHundred = quoteSum.summaryDetail.twoHundredDayAverage;
     return [fifty, twoHundred];
   } catch (e) {
     console.log(`ERROR - UNABLE TO RETRIEVE MOVING AVERAGES FOR ${ticker}`);
-    console.log("E:", e);
     return [null, null];
   }
 }

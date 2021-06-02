@@ -26,8 +26,6 @@ class ScreenContainer extends Component {
       openSnackbar: false,
       addTickerSuccess: false,
       errorTicker: "",
-      summary: undefined,
-      chartIsLoading: true,
     };
     this.handleTimeframeChange = this.handleTimeframeChange.bind(this);
     this.handleTickerChange = this.handleTickerChange.bind(this);
@@ -47,10 +45,13 @@ class ScreenContainer extends Component {
     const valResult = await validateTickerInput(newTicker);
     if (!this.state.userTickers.includes(newTicker) && valResult) {
       this.openSnackbar(newTicker, true);
+      // PUT THIS IN SETTIMEOUT?
+      // MIGHT NEED TO SET openSnackbar BACK TO FALSE
     } else {
       console.log("FAILURE IN addTicker - ScreenContainer");
       console.log(`Unable to add ${newTicker}`);
       this.openSnackbar(newTicker, false);
+      // RENDER SNACKBAR WITH ERROR HERE
     }
   }
 
@@ -108,25 +109,21 @@ class ScreenContainer extends Component {
 
   async handleWatchlistClick(e) {
     const ticker = e.target.innerText;
-    this.setData(ticker, "watchlist", this.state.timeframe);
+    this.setData(ticker, this.state.timeframe);
   }
 
   async handleTimeframeChange(e) {
-    this.setData(this.state.curTicker, "timeframe", e.target.value);
+    // THIS IS SETTING STATE CORRECTLY.  NOT SURE IF IT TRIGGERS RE-RENDER
+    this.setData(this.state.curTicker, e.target.value);
   }
 
-  async setData(ticker, caller, timeframe = this.state.timeframe) {
-    if (caller === "watchlist") {
-      this.setState({ chartIsLoading: true });
-    }
-
+  async setData(ticker, timeframe = this.state.timeframe) {
+    // if timeframe if passed as argument to timeRange, timeRange will be used.
+    //    Otherwise, current timeframe in state will be used.
     let replacementState = {};
     try {
       let [fifty, twoHundred] = await getMovingAverages(ticker);
-      let [prices, min, max, summary, priceInfo] = await getData(
-        ticker.toLowerCase(),
-        timeframe
-      );
+      let [prices, min, max] = await getData(ticker.toLowerCase(), timeframe);
 
       replacementState = {
         curTicker: ticker,
@@ -136,9 +133,6 @@ class ScreenContainer extends Component {
         dataMin: Math.min(min, fifty * 0.9),
         dataMax: Math.max(max, twoHundred * 1.1),
         timeframe: timeframe,
-        summary: summary,
-        priceInfo: priceInfo,
-        chartIsLoading: false,
       };
     } catch (e) {
       console.log("ERROR IN SET DATA:", `\n${e}`);
@@ -149,10 +143,7 @@ class ScreenContainer extends Component {
 
   handleTickerChange(e) {
     let isValidInput = TEST_REGEX.test(e.target.value);
-    this.setState({
-      isValidInput: isValidInput,
-      tickerInput: e.target.value,
-    });
+    this.setState({ isValidInput: isValidInput, tickerInput: e.target.value });
   }
 
   handleInputBlur() {
@@ -200,10 +191,9 @@ class ScreenContainer extends Component {
       openSnackbar,
       addTickerSuccess,
       errorTicker,
-      summary,
-      priceInfo,
-      chartIsLoading,
     } = this.state;
+    // let mostRecentTickerAdded = userTickers[userTickers.length - 1];
+    // console.log("MOST RECENT: ", mostRecentTickerAdded);
     const { classes } = this.props;
     return (
       <div className={classes.ScreenContainer}>
@@ -233,9 +223,6 @@ class ScreenContainer extends Component {
             handleInputFocus={this.handleInputFocus}
             addTickerSuccess={addTickerSuccess}
             errorTicker={errorTicker}
-            summary={summary}
-            priceInfo={priceInfo}
-            chartIsLoading={chartIsLoading}
           />
         </div>
       </div>
